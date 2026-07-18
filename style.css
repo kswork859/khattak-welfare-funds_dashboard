@@ -15,7 +15,7 @@ html{
 
 body{
     direction:rtl;
-    font-family:'Jameel Noori Nastaleeq','Noori Nastaliq', serif, system-ui;
+    font-family:'Noto Nastaliq Urdu','Jameel Noori Nastaleeq','Noori Nastaliq', serif, system-ui;
     background:#f4f7f8;
     color:#222;
     line-height:1.6;
