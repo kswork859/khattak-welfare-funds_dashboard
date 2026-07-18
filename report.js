@@ -101,13 +101,14 @@ async function loadReport() {
     }
 }
 
+// Start execution once script loads
 loadReport();
 
 /* ==========
    Data Structural Translators
 ========== */
 function getRecords() {
-    if (rawData.length === 0) return [];
+    if (!rawData || rawData.length === 0) return [];
     const headers = rawData[0];
     return rawData.slice(1).map(row => {
         let obj = {};
@@ -159,10 +160,10 @@ function populateDropdownFilters() {
 function applyFilters() {
     const rows = getRecords();
 
-    const keyword = searchInput ? searchInput.value.trim().toLowerCase() : "";
-    const selectedYear = yearFilter ? yearFilter.value : "";
-    const selectedMonth = monthFilter ? monthFilter.value : "";
-    const selectedType = fundTypeFilter ? fundTypeFilter.value : "both";
+    const keyword = (searchInput && searchInput.value) ? searchInput.value.trim().toLowerCase() : "";
+    const selectedYear = (yearFilter && yearFilter.value) ? yearFilter.value : "";
+    const selectedMonth = (monthFilter && monthFilter.value) ? monthFilter.value : "";
+    const selectedType = (fundTypeFilter && fundTypeFilter.value) ? fundTypeFilter.value : "both";
 
     // 1. Process main filtered dataset (Filters the table data dynamically)
     filteredData = rows.filter(item => {
@@ -342,20 +343,6 @@ function renderFilteredTable() {
 }
 
 /* ==========
-   Event Listener Framework Bindings
-========== */
-if (searchInput) searchInput.addEventListener("keyup", applyFilters);
-if (yearFilter) yearFilter.addEventListener("change", applyFilters);
-if (monthFilter) monthFilter.addEventListener("change", applyFilters);
-if (fundTypeFilter) fundTypeFilter.addEventListener("change", applyFilters);
-
-if (printBtn) {
-    printBtn.addEventListener("click", function() {
-        window.print();
-    });
-}
-
-/* ==========
    Date Formatter (To DD/MM/YYYY)
 ========== */
 function formatDate(dateString) {
@@ -372,4 +359,25 @@ function formatDate(dateString) {
     const year = date.getFullYear();
     
     return `${day}/${month}/${year}`;
+}
+
+/* ==========
+   Safe Event Listener Framework Bindings
+========== */
+if (searchInput && typeof searchInput.addEventListener === "function") {
+    searchInput.addEventListener("input", applyFilters); 
+}
+if (yearFilter && typeof yearFilter.addEventListener === "function") {
+    yearFilter.addEventListener("change", applyFilters);
+}
+if (monthFilter && typeof monthFilter.addEventListener === "function") {
+    monthFilter.addEventListener("change", applyFilters);
+}
+if (fundTypeFilter && typeof fundTypeFilter.addEventListener === "function") {
+    fundTypeFilter.addEventListener("change", applyFilters);
+}
+if (printBtn && typeof printBtn.addEventListener === "function") {
+    printBtn.addEventListener("click", function() {
+        window.print();
+    });
 }
