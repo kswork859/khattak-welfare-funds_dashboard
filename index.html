@@ -4,14 +4,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Khattak Welfare Fund Report</title>
 
-    <!-- Noori Nastaliq Font -->
+    <!-- Urdu Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400..700&display=swap" rel="stylesheet">
-    <!-- CSS -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400..700&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Custom Layout Rules to guarantee the exact row positioning -->
+    <style>
+        .summary {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .summary-row-1 {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+        .summary-row-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .summary-row-3 {
+            display: grid;
+            grid-template-columns: 1fr; /* تبدیل شدہ: اب یہ مکمل چوڑائی کا ایک کارڈ بن جائے گا */
+            gap: 20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -27,175 +52,117 @@
 
         <!-- Header -->
         <header class="header">
-
-            <h1>
-                خٹک ویلفیئر گروپ نکہ افغاناں
-            </h1>
-
-            <p class="month" id="reportMonth">
-                ماہانہ فنڈ رپورٹ
-            </p>
-
+            <h1>خٹک ویلفیئر گروپ نکہ افغانان تحصیل جنڈ ڈسٹرکٹ اٹک</h1>
+            <p class="month" id="reportMonth">ماہانہ فنڈ رپورٹ</p>
         </header>
 
-        <!-- Summary Cards -->
+        <!-- ==========================
+             Dashboard Summary
+        =========================== -->
+
         <section class="summary">
 
-            <!-- Row 1: Current Filtered Period Data -->
-            <div class="card header-span" style="grid-column: 1 / -1; background: #edf2f7; text-align: center; font-weight: bold; padding: 5px;">
-                موجودہ فلٹر شدہ مدت کا خلاصہ (Selected Period Summary)
+            <!-- FIRST ROW: Total Fund (Standalone Balance Framework) -->
+            <div class="summary-row-1">
+                <div class="card" style="text-align: center;">
+                    <span class="label">صافی بیلنس (کل محفوظ فنڈ)</span>
+                    <h2 id="closingBalance" style="color:#2d3748; font-size: 2.25rem; margin-top: 10px;">0</h2>
+                </div>
             </div>
 
-            <div class="card">
-                <span class="label">کل گروپ فنڈ وصولی</span>
-                <h2 id="totalGroupFund" style="color: #2b6cb0;">0</h2>
+            <!-- SECOND ROW: Core Operational Cards Breakdown -->
+            <div class="summary-row-2">
+                
+                <!-- Total Collections -->
+                <div class="card">
+                    <span class="label">کل آمدنی (فنڈز جمع شدہ)</span>
+                    <h2 id="totalCollection" style="color:#2f855a;">0</h2>
+                </div>
+
+                <!-- Group Fund -->
+                <div class="card">
+                    <span class="label">کل گروپ فنڈ</span>
+                    <h2 id="totalGroupFund" style="color:#2b6cb0;">0</h2>
+                </div>
+
+                <!-- Emergency Fund -->
+                <div class="card">
+                    <span class="label">کل ایمرجنسی فنڈ</span>
+                    <h2 id="totalEmergencyFund" style="color:#b7791f;">0</h2>
+                </div>
+
+                <!-- Total Expenses -->
+                <div class="card">
+                    <span class="label">کل اخراجات</span>
+                    <h2 id="totalExpenses" style="color:#c53030;">0</h2>
+                </div>
+
             </div>
 
-            <div class="card">
-                <span class="label">کل ایمرجنسی فنڈ وصولی</span>
-                <h2 id="totalEmergencyFund" style="color: #b7791f;">0</h2>
-            </div>
-
-            <div class="card">
-                <span class="label">میزان وصولی</span>
-                <h2 id="totalCollection" style="color: #2f855a;">0</h2>
-            </div>
-
-            <div class="card">
-                <span class="label">کل اخراجات </span>
-                <h2 id="totalExpenses" style="color: #c53030;">0</h2>
-            </div>
-
-            <div class="card">
-                <span class="label">اختتامی بیلنس </span>
-                <h2 id="closingBalance" style="font-weight: bold;">0</h2>
-            </div>
-
-            <div class="card">
-                <span class="label">کل اندراجات</span>
-                <h2 id="totalEntries">0</h2>
-            </div>
-
-            <!-- Row 2: Monthly Comparison (Current vs Previous) -->
-            <div class="card header-span" style="grid-column: 1 / -1; background: #edf2f7; text-align: center; font-weight: bold; padding: 5px;">
-                ماہانہ تقابلی جائزہ (Monthly Overview)
-            </div>
-
-            <!-- Previous Month Card -->
-            <div class="card">
-                <span class="label" id="lblPrevMonth">گزشتہ مہینہ</span>
-                <h3 style="font-size:0.9rem; color:#718096; margin: 4px 0;">گروپ فنڈ: <span id="prevGroup">0</span></h3>
-                <h3 style="font-size:0.9rem; color:#718096; margin: 4px 0;">ایمرجنسی: <span id="prevEmergency">0</span></h3>
-                <h3 style="font-size:0.9rem; color:#c53030; margin: 4px 0;">کل اخراجات: <span id="prevExpenses">0</span></h3>
-                <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 5px 0;">
-                <span style="font-size:0.75rem; color:#4a5568;">صافی بیلنس (Net):</span>
-                <h2 id="prevMonthTotal" style="font-size:1.3rem;">0</h2>
-            </div>
-
-            <!-- Current Month Card -->
-            <div class="card">
-                <span class="label" id="lblCurrMonth">موجودہ مہینہ</span>
-                <h3 style="font-size:0.9rem; color:#718096; margin: 4px 0;">گروپ فنڈ: <span id="currGroup">0</span></h3>
-                <h3 style="font-size:0.9rem; color:#718096; margin: 4px 0;">ایمرجنسی: <span id="currEmergency">0</span></h3>
-                <h3 style="font-size:0.9rem; color:#c53030; margin: 4px 0;">کل اخراجات: <span id="currExpenses">0</span></h3>
-                <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 5px 0;">
-                <span style="font-size:0.75rem; color:#4a5568;">صافی بیلنس (Net):</span>
-                <h2 id="currMonthTotal" style="font-size:1.3rem; color: #2f855a;">0</h2>
-            </div>
 
         </section>
 
         <!-- Toolbar -->
         <section class="toolbar">
-
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="نام سے تلاش کریں...">
-
-            <div class="filter-group" style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <input type="text" id="searchInput" placeholder="نام سے تلاش کریں...">
+            <div class="filter-group">
                 <select id="yearFilter">
                     <option value="">سال منتخب کریں (All)</option>
                 </select>
-
                 <select id="monthFilter">
                     <option value="">مہینہ منتخب کریں (All)</option>
                 </select>
-
-                <!-- Fund Type Filter Selector with Expense Option Added -->
-                <select id="fundTypeFilter">
-                    <option value="both">تمام فنڈز اور اخراجات (Show All)</option>
-                    <option value="Group Fund">صرف گروپ فنڈ (Group Fund)</option>
-                    <option value="Emergency Fund">صرف ایمرجنسی فنڈ (Emergency Fund)</option>
-                    <option value="Expense">صرف اخراجات (Expenses)</option>
-                </select>
             </div>
-
-            <button id="printBtn">
-                🖨 پرنٹ
-            </button>
-
+            <button id="printBtn">🖨 پرنٹ</button>
         </section>
 
         <!-- Report Table -->
         <section class="table-wrapper">
-
             <table id="fundTable">
-
                 <thead>
-
                     <tr>
-
-                        <th>
-                            شمار
-                        </th>
-
-                        <th>
-                            تفصیل / عطیہ دہندہ
-                        </th>
-
-                        <th>
-                            رقم
-                        </th>
-
-                        <th>
-                            تاریخ
-                        </th>
-
-                        <th>
-                            یومیہ میزان
-                        </th>
-
+                        <th>شمار</th>
+                        <th>تفصیل / عطیہ دہندہ</th>
+                        <th>رقم</th>
+                        <th>تاریخ</th>
+                        <th>یومیہ میزان</th>
                     </tr>
-
                 </thead>
-
                 <tbody id="fundTableBody">
-
-                    <!-- JavaScript Implementation -->
-
+                    <!-- Dynamic Rows populated by report.js -->
                 </tbody>
-
             </table>
-
         </section>
 
+        <!-- THIRD ROW: Dynamic Filter Result Matrix -->
+            <div class="summary-row-3">
+
+                <!-- Filter Result Card (Updated according to user requirements) -->
+                <div class="card monthly-card" style="background-color: #f7fafc; border-right: 5px solid #2b6cb0;">
+                    <span class="label" id="lblCurrMonth" style="font-weight: bold; color: #2d3748;">موجودہ منتخب فلٹر کا رزلٹ</span>
+                    <h3>گروپ فنڈ : <span id="currGroup">0</span></h3>
+                    <h3>ایمرجنسی فنڈ : <span id="currEmergency">0</span></h3>
+                    <h3 style="color:#c53030;">اخراجات : <span id="currExpenses">0</span></h3>
+                    <hr>
+                    <span style="font-weight: bold;">فلٹر شدہ صافی بیلنس</span>
+                    <h2 id="currMonthTotal" style="color:#2f855a;">0</h2>
+                </div>
+
+            </div>
         <!-- Footer -->
         <footer>
-
             <p>
-
-                Developed with ❤️ by Khurram Shahzad for 
-                Khattak Welfare Group<br> 
-                Nakka Afghanan Tehsil Jand District Attock
-
+                Developed with ❤️ by Khurram Shahzad
+                <br>
+                Khattak Welfare Group
+                <br>
+                Nakka Afghanan, Tehsil Jand, District Attock
             </p>
-
         </footer>
 
     </div>
 
-    <!-- JS -->
+    <!-- JavaScript -->
     <script src="report.js"></script>
 
 </body>
