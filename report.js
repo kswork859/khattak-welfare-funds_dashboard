@@ -16,25 +16,19 @@ const reportContainer = document.getElementById("reportContainer");
 const tableBody = document.getElementById("fundTableBody");
 const reportMonth = document.getElementById("reportMonth");
 
-// Summary Dynamic Card References
+// Summary Dynamic Card References (کل ریکارڈز - لائف ٹائم ڈیٹا)
 const totalGroupFund = document.getElementById("totalGroupFund");
 const totalEmergencyFund = document.getElementById("totalEmergencyFund");
 const totalCollection = document.getElementById("totalCollection");
-const totalExpenses = document.getElementById("totalExpenses");
-const closingBalance = document.getElementById("closingBalance");
-const totalEntries = document.getElementById("totalEntries");
+const totalExpenses = document.getElementById("totalExpenses"); 
+const closingBalance = document.getElementById("closingBalance"); 
+const totalEntries = document.getElementById("totalEntries");   
 
-// Comparative Target Nodes (Updated with Expense References)
-const lblPrevMonth = document.getElementById("lblPrevMonth");
+// Target Filtering Elements (فلٹر شدہ رزلٹ کارڈ کے نوڈز)
 const lblCurrMonth = document.getElementById("lblCurrMonth");
-const prevGroup = document.getElementById("prevGroup");
-const prevEmergency = document.getElementById("prevEmergency");
-const prevExpenses = document.getElementById("prevExpenses"); // New reference
-const prevMonthTotal = document.getElementById("prevMonthTotal");
-
 const currGroup = document.getElementById("currGroup");
 const currEmergency = document.getElementById("currEmergency");
-const currExpenses = document.getElementById("currExpenses"); // New reference
+const currExpenses = document.getElementById("currExpenses"); 
 const currMonthTotal = document.getElementById("currMonthTotal");
 
 // Target Filtering Elements
@@ -63,7 +57,9 @@ const urduMonthNames = {
 const params = new URLSearchParams(window.location.search);
 const sheetName = params.get("sheet") || "July2026";
 
-reportMonth.innerHTML = sheetName.replace(/([A-Za-z]+)(\d+)/, "$1 $2");
+if (reportMonth) {
+    reportMonth.innerHTML = sheetName.replace(/([A-Za-z]+)(\d+)/, "$1 $2");
+}
 
 /* ==========
    Utility Helpers
@@ -74,13 +70,13 @@ function money(value) {
 }
 
 function showLoading() {
-    loading.style.display = "flex";
-    reportContainer.style.display = "none";
+    if (loading) loading.style.display = "flex";
+    if (reportContainer) reportContainer.style.display = "none";
 }
 
 function hideLoading() {
-    loading.style.display = "none";
-    reportContainer.style.display = "block";
+    if (loading) loading.style.display = "none";
+    if (reportContainer) reportContainer.style.display = "block";
 }
 
 /* ==========
@@ -99,7 +95,9 @@ async function loadReport() {
         hideLoading();
     } catch (error) {
         console.error(error);
-        loading.innerHTML = `<h2>رپورٹ لوڈ نہیں ہو سکی</h2><p>${error.message}</p>`;
+        if (loading) {
+            loading.innerHTML = `<h2>رپورٹ لوڈ نہیں ہو سکی</h2><p>${error.message}</p>`;
+        }
     }
 }
 
@@ -139,16 +137,20 @@ function populateDropdownFilters() {
         }
     });
 
-    yearFilter.innerHTML = `<option value="">سال منتخب کریں (All)</option>`;
-    [...years].sort((a, b) => b - a).forEach(year => {
-        yearFilter.innerHTML += `<option value="${year}">${year}</option>`;
-    });
+    if (yearFilter) {
+        yearFilter.innerHTML = `<option value="">سال منتخب کریں (All)</option>`;
+        [...years].sort((a, b) => b - a).forEach(year => {
+            yearFilter.innerHTML += `<option value="${year}">${year}</option>`;
+        });
+    }
 
-    monthFilter.innerHTML = `<option value="">مہینہ منتخب کریں (All)</option>`;
-    [...months].sort().forEach(m => {
-        const displayLabel = urduMonthNames[m] || m;
-        monthFilter.innerHTML += `<option value="${m}">${displayLabel}</option>`;
-    });
+    if (monthFilter) {
+        monthFilter.innerHTML = `<option value="">مہینہ منتخب کریں (All)</option>`;
+        [...months].sort().forEach(m => {
+            const displayLabel = urduMonthNames[m] || m;
+            monthFilter.innerHTML += `<option value="${m}">${displayLabel}</option>`;
+        });
+    }
 }
 
 /* ==========
@@ -157,12 +159,12 @@ function populateDropdownFilters() {
 function applyFilters() {
     const rows = getRecords();
 
-    const keyword = searchInput.value.trim().toLowerCase();
-    const selectedYear = yearFilter.value;
-    const selectedMonth = monthFilter.value;
-    const selectedType = fundTypeFilter.value;
+    const keyword = searchInput ? searchInput.value.trim().toLowerCase() : "";
+    const selectedYear = yearFilter ? yearFilter.value : "";
+    const selectedMonth = monthFilter ? monthFilter.value : "";
+    const selectedType = fundTypeFilter ? fundTypeFilter.value : "both";
 
-    // 1. Process main filtered table dataset
+    // 1. Process main filtered dataset (Filters the table data dynamically)
     filteredData = rows.filter(item => {
         let ok = true;
 
@@ -184,121 +186,121 @@ function applyFilters() {
         return ok;
     });
 
-    // 2. Perform Calculations
-    calculateSummaryAndComparisons(rows);
+    // 2. Perform Calculations (Pass both raw rows for top cards and filteredData for dynamic updates)
+    calculateSummaryAndFilteredResults(rows, filteredData);
     renderFilteredTable();
 }
 
 /* ==========
-   Summary and Multi-Month Comparison Calculations
+   Summary and Live Filter Calculations
 ========== */
-function calculateSummaryAndComparisons(allRows) {
-    // A. Calculations for the current active filters
-    let groupTotal = 0;
-    let emergencyTotal = 0;
-    let expenseTotal = 0;
-
-    filteredData.forEach(item => {
-        const amount = Number(item.Amount || 0);
-        const type = String(item.Type || "").trim();
-
-        if (type === "Emergency Fund") {
-            emergencyTotal += amount;
-        } else if (type === "Expense") {
-            expenseTotal += amount;
-        } else {
-            // Defaulting structural matches to Group Fund
-            groupTotal += amount;
-        }
-    });
-
-    const combinedIncome = groupTotal + emergencyTotal;
-    const netClosingBalance = combinedIncome - expenseTotal;
-
-    totalGroupFund.innerHTML = money(groupTotal);
-    totalEmergencyFund.innerHTML = money(emergencyTotal);
-    totalCollection.innerHTML = money(combinedIncome);
-    totalExpenses.innerHTML = money(expenseTotal);
-    closingBalance.innerHTML = money(netClosingBalance);
-    totalEntries.innerHTML = filteredData.length;
-
-    // B. Contextual Time Comparative Calculations (July 2026 vs June 2026 context)
-    const targetYear = 2026;
-    const targetMonthNum = 7; // July
+function calculateSummaryAndFilteredResults(allRows, filteredRows) {
     
-    // Set text display labels explicitly
-    lblCurrMonth.innerHTML = `${urduMonthNames["07"]} ${targetYear} (موجودہ)`;
-    lblPrevMonth.innerHTML = `${urduMonthNames["06"]} ${targetYear} (گزشتہ)`;
-
-    let currentMonthGroup = 0;
-    let currentMonthEmergency = 0;
-    let currentMonthExpenses = 0;
-
-    let prevMonthGroup = 0;
-    let prevMonthEmergency = 0;
-    let prevMonthExpenses = 0;
+    // ==========================================
+    // A. CALCULATE GLOBAL METRICS (Top Row Cards - Unaffected by UI Filters)
+    // ==========================================
+    let globalGroupFund = 0;
+    let globalEmergencyFund = 0;
+    let globalExpenseTotal = 0;
 
     allRows.forEach(item => {
-        if (!item.Date) return;
-
-        const cleanDate = String(item.Date).replace(/\//g, '-');
-        const parts = cleanDate.split('-'); // [YYYY, MM, DD]
-        if (parts.length < 2) return;
-
-        const itemYear = parseInt(parts[0], 10);
-        const itemMonth = parseInt(parts[1], 10);
-        const amount = Number(item.Amount || 0);
+        const amount = Math.max(0, Number(item.Amount || 0)); // رقم نیگیٹو نہ ہو
         const type = String(item.Type || "").trim();
+        const deductFrom = String(item.Deduct_From || "").trim();
 
-        // Evaluate Current target period (July 2026)
-        if (itemYear === targetYear && itemMonth === targetMonthNum) {
-            if (type === "Emergency Fund") currentMonthEmergency += amount;
-            else if (type === "Expense") currentMonthExpenses += amount;
-            else currentMonthGroup += amount;
-        }
-        
-        // Evaluate Previous target period (June 2026)
-        if (itemYear === targetYear && itemMonth === (targetMonthNum - 1)) {
-            if (type === "Emergency Fund") prevMonthEmergency += amount;
-            else if (type === "Expense") prevMonthExpenses += amount;
-            else prevMonthGroup += amount;
+        if (type === "Emergency Fund") {
+            globalEmergencyFund += amount;
+        } else if (type === "Expense") {
+            globalExpenseTotal += amount;
+            if (deductFrom === "Emergency Fund") {
+                globalEmergencyFund -= amount;
+            } else {
+                globalGroupFund -= amount;
+            }
+        } else {
+            globalGroupFund += amount;
         }
     });
 
-    // Populate current month comparison card DOM structural targets
-    currGroup.innerHTML = money(currentMonthGroup);
-    currEmergency.innerHTML = money(currentMonthEmergency);
-    currExpenses.innerHTML = money(currentMonthExpenses);
-    currMonthTotal.innerHTML = money((currentMonthGroup + currentMonthEmergency) - currentMonthExpenses);
+    // فنڈز کی فائنل ویلیو کو زیرو (0) سے نیچے جانے سے روکنا
+    globalGroupFund = Math.max(0, globalGroupFund);
+    globalEmergencyFund = Math.max(0, globalEmergencyFund);
 
-    // Populate previous month comparison card DOM structural targets
-    prevGroup.innerHTML = money(prevMonthGroup);
-    prevEmergency.innerHTML = money(prevMonthEmergency);
-    prevExpenses.innerHTML = money(prevMonthExpenses);
-    prevMonthTotal.innerHTML = money((prevMonthGroup + prevMonthEmergency) - prevMonthExpenses);
+    const netClosingBalance = globalGroupFund + globalEmergencyFund;
+    const totalIncomeIncludingExpenses = globalGroupFund + globalEmergencyFund + globalExpenseTotal;
+
+    if (totalGroupFund) totalGroupFund.innerHTML = money(globalGroupFund);
+    if (totalEmergencyFund) totalEmergencyFund.innerHTML = money(globalEmergencyFund);
+    if (totalCollection) totalCollection.innerHTML = money(totalIncomeIncludingExpenses); 
+    if (totalExpenses) totalExpenses.innerHTML = money(globalExpenseTotal);
+    if (closingBalance) closingBalance.innerHTML = money(netClosingBalance);
+    if (totalEntries) totalEntries.innerHTML = filteredRows.length;
+
+    // ==========================================
+    // B. CALCULATE DYNAMIC FILTER RESULTS (Only on UI Applied Filters)
+    // ==========================================
+    let filterGroup = 0;
+    let filterEmergency = 0;
+    let filterExpenses = 0;
+
+    filteredRows.forEach(item => {
+        const amount = Math.max(0, Number(item.Amount || 0)); // رقم نیگیٹو نہ ہو
+        const type = String(item.Type || "").trim();
+        const deductFrom = String(item.Deduct_From || "").trim();
+
+        if (type === "Emergency Fund") {
+            filterEmergency += amount;
+        } else if (type === "Expense") {
+            filterExpenses += amount;
+            if (deductFrom === "Emergency Fund") filterEmergency -= amount;
+            else filterGroup -= amount;
+        } else {
+            filterGroup += amount;
+        }
+    });
+
+    // فلٹر شدہ فنڈز کی فائنل ویلیو کو بھی زیرو (0) سے نیچے جانے سے روکنا
+    filterGroup = Math.max(0, filterGroup);
+    filterEmergency = Math.max(0, filterEmergency);
+
+    // Update the Filter Result UI Card with live changes
+    if (currGroup) currGroup.innerHTML = money(filterGroup);
+    if (currEmergency) currEmergency.innerHTML = money(filterEmergency);
+    if (currExpenses) currExpenses.innerHTML = money(filterExpenses);
+    
+    // Net result of applied filters (Group + Emergency)
+    if (currMonthTotal) currMonthTotal.innerHTML = money(filterGroup + filterEmergency);
+
+    // Dynamic Label text modification to give active hint to user
+    if (lblCurrMonth) {
+        const activeSearch = searchInput && searchInput.value ? 'سرچ شدہ' : 'منتخب';
+        lblCurrMonth.innerHTML = `موجودہ ${activeSearch} فلٹر کا لائیو رزلٹ`;
+    }
 }
 
 /* ==========
    Dynamic Filtered Grid Component Builder
 ========== */
 function renderFilteredTable() {
+    if (!tableBody) return;
     tableBody.innerHTML = "";
     let sr = 1;
 
     const groups = {};
     filteredData.forEach(item => {
+        if (!item.Date) return;
         if (!groups[item.Date]) groups[item.Date] = [];
         groups[item.Date].push(item);
     });
 
     Object.keys(groups).forEach(date => {
         const list = groups[date];
-        const total = list.reduce((sum, item) => sum + Number(item.Amount || 0), 0);
+        // ٹیبل ڈیلی ٹوٹل میں بھی ویلیو نیگیٹو نہ ہو
+        const total = list.reduce((sum, item) => sum + Math.max(0, Number(item.Amount || 0)), 0);
 
         list.forEach((item, index) => {
             const tr = document.createElement("tr");
             
-            // Generate minor indicator badges in the table row
             let typeUrdu = "گروپ";
             let badgeColor = "#718096";
             
@@ -310,16 +312,16 @@ function renderFilteredTable() {
                 badgeColor = "#c53030";
             }
 
-            const typeLabel = fundTypeFilter.value === "both" ? 
+            const currentTypeFilter = fundTypeFilter ? fundTypeFilter.value : "both";
+            const typeLabel = currentTypeFilter === "both" ? 
                 ` <small style="color:${badgeColor}; font-size:0.75rem;">(${typeUrdu})</small>` : '';
 
-            // Apply distinct red shading or styling if the entry is an Expense row
             const expenseRowStyle = item.Type === "Expense" ? 'style="color: #c53030; font-weight: 500;"' : '';
 
             let html = `
                 <td>${sr++}</td>
-                <td style="text-align:right" ${expenseRowStyle}>${item.Name}${typeLabel}</td>
-                <td class="amount" ${expenseRowStyle}>${money(item.Amount)}</td>
+                <td style="text-align:right" ${expenseRowStyle}>${item.Name || ""}${typeLabel}</td>
+                <td class="amount" ${expenseRowStyle}>${money(Math.max(0, item.Amount))}</td>
             `;
 
             if (index === 0) {
@@ -342,14 +344,16 @@ function renderFilteredTable() {
 /* ==========
    Event Listener Framework Bindings
 ========== */
-searchInput.addEventListener("keyup", applyFilters);
-yearFilter.addEventListener("change", applyFilters);
-monthFilter.addEventListener("change", applyFilters);
-fundTypeFilter.addEventListener("change", applyFilters);
+if (searchInput) searchInput.addEventListener("keyup", applyFilters);
+if (yearFilter) yearFilter.addEventListener("change", applyFilters);
+if (monthFilter) monthFilter.addEventListener("change", applyFilters);
+if (fundTypeFilter) fundTypeFilter.addEventListener("change", applyFilters);
 
-printBtn.addEventListener("click", function() {
-    window.print();
-});
+if (printBtn) {
+    printBtn.addEventListener("click", function() {
+        window.print();
+    });
+}
 
 /* ==========
    Date Formatter (To DD/MM/YYYY)
