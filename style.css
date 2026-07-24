@@ -70,11 +70,11 @@ Header & Banner Fix
 }
 
 .header-banner{
-    width:100%;
+    max-width:100%; /* تصویر اپنے اصل سائز سے زیادہ بڑی نہیں ہوگی */
+    width:auto;     /* اصل سائز برقرار رہے گا */
     height:auto;
-    display:block;
+    display:inline-block; /* سینٹر میں لانے کے لیے */
     border-radius:16px;
-    object-fit:cover;
 }
 
 .header h1{
@@ -339,6 +339,7 @@ Mobile
     }
 
     .header-banner{
+        width:100%; /* موبائل پر سکرین کے مطابق مکمل فٹ آئے گی */
         border-radius:10px;
     }
 
