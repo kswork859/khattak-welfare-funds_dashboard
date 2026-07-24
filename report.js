@@ -296,8 +296,18 @@ function renderFilteredTable() {
 
     Object.keys(groups).forEach(date => {
         const list = groups[date];
-        // ٹیبل ڈیلی ٹوٹل میں بھی ویلیو نیگیٹو نہ ہو
-        const total = list.reduce((sum, item) => sum + Math.max(0, Number(item.Amount || 0)), 0);
+
+        // Deduct expenses from the daily total calculation
+        const total = list.reduce((sum, item) => {
+            const amt = Math.max(0, Number(item.Amount || 0));
+            const type = String(item.Type || "").trim();
+
+            if (type === "Expense") {
+                return sum - amt;
+            } else {
+                return sum + amt;
+            }
+        }, 0);
 
         list.forEach((item, index) => {
             const tr = document.createElement("tr");
@@ -322,7 +332,7 @@ function renderFilteredTable() {
             let html = `
                 <td>${sr++}</td>
                 <td style="text-align:right" ${expenseRowStyle}>${item.Name || ""}${typeLabel}</td>
-                <td class="amount" ${expenseRowStyle}>${money(Math.max(0, item.Amount))}</td>
+                <td class="amount" ${expenseRowStyle}>${item.Type === "Expense" ? "-" : ""}${money(Math.max(0, item.Amount))}</td>
             `;
 
             if (index === 0) {
