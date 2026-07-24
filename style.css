@@ -2,7 +2,9 @@
    Khattak Welfare Fund Report
    style.css
 ==================================*/
-
+#kul-amdan{
+   display: none;
+}
 *{
     margin:0;
     padding:0;
