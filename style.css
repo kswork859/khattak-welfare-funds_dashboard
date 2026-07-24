@@ -62,13 +62,10 @@ Container
 Header
 ==========================*/
 .header{
-    background:#0B6E4F;
     color:white;
-    padding:35px 20px;
     border-radius:16px;
     text-align:center;
     margin-bottom:25px;
-    box-shadow:0 10px 25px rgba(11, 110, 79, 0.15);
 }
 
 .header h1{
