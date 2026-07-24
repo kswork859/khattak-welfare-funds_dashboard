@@ -59,13 +59,22 @@ Container
 }
 
 /*==========================
-Header
+Header & Banner Fix
 ==========================*/
 .header{
-    color:white;
-    border-radius:16px;
     text-align:center;
     margin-bottom:25px;
+    width:100%;
+    overflow:hidden;
+    border-radius:16px;
+}
+
+.header-banner{
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:16px;
+    object-fit:cover;
 }
 
 .header h1{
@@ -322,9 +331,15 @@ Mobile
         padding:8px;
     }
 
+    /* Fixed Header for Mobile */
     .header{
-        padding:20px 10px;
+        padding:0;
         margin-bottom:15px;
+        border-radius:10px;
+    }
+
+    .header-banner{
+        border-radius:10px;
     }
 
     .header h1{
