@@ -33,7 +33,7 @@
         }
         .summary-row-3 {
             display: grid;
-            grid-template-columns: 1fr; /* تبدیل شدہ: اب یہ مکمل چوڑائی کا ایک کارڈ بن جائے گا */
+            grid-template-columns: 1fr;
             gap: 20px;
         }
     </style>
@@ -51,10 +51,9 @@
     <div class="container" id="reportContainer" style="display:none;">
 
         <!-- Header -->
-        <!-- Header -->
-<header class="header">
-    <img src="images/banner.png" alt="Khattak Welfare Group Banner" class="header-banner">
-</header>
+        <header class="header">
+            <img src="images/banner.png" alt="Khattak Welfare Group Banner" class="header-banner">
+        </header>
 
         <!-- ==========================
              Dashboard Summary
@@ -62,7 +61,7 @@
 
         <section class="summary">
 
-            <!-- FIRST ROW: Total Fund (Standalone Balance Framework) -->
+            <!-- FIRST ROW: Total Fund -->
             <div class="summary-row-1">
                 <div class="card" style="text-align: center;">
                     <span class="label">صافی بیلنس (کل محفوظ فنڈ)</span>
@@ -99,13 +98,19 @@
 
             </div>
 
-
         </section>
 
         <!-- Toolbar -->
         <section class="toolbar">
             <input type="text" id="searchInput" placeholder="نام سے تلاش کریں...">
             <div class="filter-group">
+                <!-- نیا شامل کردہ Category/Type Filter -->
+                <select id="typeFilter">
+                    <option value="">تمام اندراجات (All)</option>
+                    <option value="group">گروپ فنڈ (Group Fund)</option>
+                    <option value="emergency">ایمرجنسی فنڈ (Emergency Fund)</option>
+                    <option value="expense">اخراجات (Expenses)</option>
+                </select>
                 <select id="yearFilter">
                     <option value="">سال منتخب کریں (All)</option>
                 </select>
@@ -135,20 +140,23 @@
         </section>
 
         <!-- THIRD ROW: Dynamic Filter Result Matrix -->
-            <div class="summary-row-3">
+        <div class="summary-row-3">
 
-                <!-- Filter Result Card (Updated according to user requirements) -->
-                <div class="card monthly-card" style="background-color: #f7fafc; border-right: 5px solid #2b6cb0;">
-                    <span class="label" id="lblCurrMonth" style="font-weight: bold; color: #2d3748;">موجودہ منتخب فلٹر کا رزلٹ</span>
-                    <h3>گروپ فنڈ : <span id="currGroup">0</span></h3>
-                    <h3>ایمرجنسی فنڈ : <span id="currEmergency">0</span></h3>
-                    <h3 style="color:#c53030;">اخراجات : <span id="currExpenses">0</span></h3>
-                    <hr>
-                    <span style="font-weight: bold;">فلٹر شدہ صافی بیلنس</span>
-                    <h2 id="currMonthTotal" style="color:#2f855a;">0</h2>
-                </div>
-
+            <!-- Filter Result Card -->
+            <div class="card monthly-card" style="background-color: #f7fafc; border-right: 5px solid #2b6cb0;">
+                <span class="label" id="lblCurrMonth" style="font-weight: bold; color: #2d3748;">موجودہ منتخب فلٹر کا رزلٹ</span>
+                
+                <h3 id="rowGroup">گروپ فنڈ : <span id="currGroup">0</span></h3>
+                <h3 id="rowEmergency">ایمرجنسی فنڈ : <span id="currEmergency">0</span></h3>
+                <h3 id="rowExpense" style="color:#c53030;">اخراجات : <span id="currExpenses">0</span></h3>
+                
+                <hr>
+                <span style="font-weight: bold;">فلٹر شدہ صافی بیلنس</span>
+                <h2 id="currMonthTotal" style="color:#2f855a;">0</h2>
             </div>
+
+        </div>
+
         <!-- Footer -->
         <footer>
             <p>
