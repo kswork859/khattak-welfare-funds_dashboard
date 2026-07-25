@@ -35,7 +35,7 @@ const currMonthTotal = document.getElementById("currMonthTotal");
 const searchInput = document.getElementById("searchInput");
 const yearFilter = document.getElementById("yearFilter");
 const monthFilter = document.getElementById("monthFilter");
-const fundTypeFilter = document.getElementById("fundTypeFilter"); 
+const fundTypeFilter = document.getElementById("fundTypeFilter") || document.getElementById("typeFilter"); 
 const printBtn = document.getElementById("printBtn");
 
 /* ==========
@@ -44,7 +44,7 @@ const printBtn = document.getElementById("printBtn");
 let rawData = [];
 let filteredData = [];
 
-// Static Month dictionary maps for comparative visual indicators
+// Static Month dictionary maps
 const urduMonthNames = {
     "01": "جنوری", "02": "فروری", "03": "مارچ", "04": "اپریل",
     "05": "مئی", "06": "جون", "07": "جولائی", "08": "اگست",
@@ -165,7 +165,7 @@ function applyFilters() {
     const selectedMonth = (monthFilter && monthFilter.value) ? monthFilter.value : "";
     const selectedType = (fundTypeFilter && fundTypeFilter.value) ? fundTypeFilter.value : "both";
 
-    // 1. Process main filtered dataset (Filters the table data dynamically)
+    // 1. Process main filtered dataset
     filteredData = rows.filter(item => {
         let ok = true;
 
@@ -180,22 +180,32 @@ function applyFilters() {
             if (ok && selectedMonth && parts[1] !== selectedMonth) ok = false;
         }
 
-        if (ok && selectedType !== "both") {
-            ok = String(item.Type || "").trim() === selectedType;
+        if (ok && selectedType !== "both" && selectedType !== "") {
+            const itemType = String(item.Type || "").trim();
+            if (selectedType === "group" || selectedType === "Group Fund") {
+                ok = (itemType === "Group Fund" || itemType === "group" || itemType === "");
+            } else if (selectedType === "emergency" || selectedType === "Emergency Fund") {
+                ok = (itemType === "Emergency Fund" || itemType === "emergency");
+            } else if (selectedType === "expense" || selectedType === "Expenses" || selectedType === "Expense") {
+                ok = (itemType === "Expense" || itemType === "expense");
+            }
         }
 
         return ok;
     });
 
-    // 2. Perform Calculations (Pass both raw rows for top cards and filteredData for dynamic updates)
-    calculateSummaryAndFilteredResults(rows, filteredData);
+    // 2. Perform Date Ascending Sort (پرانی تاریخ سے نئی تاریخ کی ترتیب)
+    filteredData.sort((a, b) => new Date(a.Date) - new Date(b.Date));
+
+    // 3. Perform Calculations & Display Updates
+    calculateSummaryAndFilteredResults(rows, filteredData, selectedType);
     renderFilteredTable();
 }
 
 /* ==========
    Summary and Live Filter Calculations
 ========== */
-function calculateSummaryAndFilteredResults(allRows, filteredRows) {
+function calculateSummaryAndFilteredResults(allRows, filteredRows, selectedType) {
     
     // ==========================================
     // A. CALCULATE GLOBAL METRICS (Top Row Cards - Unaffected by UI Filters)
@@ -205,7 +215,7 @@ function calculateSummaryAndFilteredResults(allRows, filteredRows) {
     let globalExpenseTotal = 0;
 
     allRows.forEach(item => {
-        const amount = Math.max(0, Number(item.Amount || 0)); // رقم نیگیٹو نہ ہو
+        const amount = Math.max(0, Number(item.Amount || 0));
         const type = String(item.Type || "").trim();
         const deductFrom = String(item.Deduct_From || "").trim();
 
@@ -223,7 +233,6 @@ function calculateSummaryAndFilteredResults(allRows, filteredRows) {
         }
     });
 
-    // فنڈز کی فائنل ویلیو کو زیرو (0) سے نیچے جانے سے روکنا
     globalGroupFund = Math.max(0, globalGroupFund);
     globalEmergencyFund = Math.max(0, globalEmergencyFund);
 
@@ -238,44 +247,73 @@ function calculateSummaryAndFilteredResults(allRows, filteredRows) {
     if (totalEntries) totalEntries.innerHTML = filteredRows.length;
 
     // ==========================================
-    // B. CALCULATE DYNAMIC FILTER RESULTS (Only on UI Applied Filters)
+    // B. CALCULATE DYNAMIC FILTER RESULTS
     // ==========================================
     let filterGroup = 0;
     let filterEmergency = 0;
     let filterExpenses = 0;
 
     filteredRows.forEach(item => {
-        const amount = Math.max(0, Number(item.Amount || 0)); // رقم نیگیٹو نہ ہو
+        const amount = Math.max(0, Number(item.Amount || 0));
         const type = String(item.Type || "").trim();
-        const deductFrom = String(item.Deduct_From || "").trim();
 
-        if (type === "Emergency Fund") {
+        if (type === "Emergency Fund" || type === "emergency") {
             filterEmergency += amount;
-        } else if (type === "Expense") {
+        } else if (type === "Expense" || type === "expense") {
             filterExpenses += amount;
-            if (deductFrom === "Emergency Fund") filterEmergency -= amount;
-            else filterGroup -= amount;
         } else {
             filterGroup += amount;
         }
     });
 
-    // فلٹر شدہ فنڈز کی فائنل ویلیو کو بھی زیرو (0) سے نیچے جانے سے روکنا
-    filterGroup = Math.max(0, filterGroup);
-    filterEmergency = Math.max(0, filterEmergency);
+    // Node Hiding & Display Customization for Filter Card
+    const parentGroup = currGroup ? currGroup.parentElement : null;
+    const parentEmergency = currEmergency ? currEmergency.parentElement : null;
+    const parentExpenses = currExpenses ? currExpenses.parentElement : null;
 
-    // Update the Filter Result UI Card with live changes
+    if (parentGroup) parentGroup.style.display = "block";
+    if (parentEmergency) parentEmergency.style.display = "block";
+    if (parentExpenses) parentExpenses.style.display = "block";
+
+    let finalFilterBalance = 0;
+
+    if (selectedType === "group" || selectedType === "Group Fund") {
+        if (parentEmergency) parentEmergency.style.display = "none";
+        if (parentExpenses) parentExpenses.style.display = "none";
+        finalFilterBalance = filterGroup;
+    } else if (selectedType === "emergency" || selectedType === "Emergency Fund") {
+        if (parentGroup) parentGroup.style.display = "none";
+        if (parentExpenses) parentExpenses.style.display = "none";
+        finalFilterBalance = filterEmergency;
+    } else if (selectedType === "expense" || selectedType === "Expenses" || selectedType === "Expense") {
+        if (parentGroup) parentGroup.style.display = "none";
+        if (parentEmergency) parentEmergency.style.display = "none";
+        finalFilterBalance = filterExpenses;
+    } else {
+        // 'both' or 'all'
+        finalFilterBalance = (filterGroup + filterEmergency) - filterExpenses;
+    }
+
     if (currGroup) currGroup.innerHTML = money(filterGroup);
     if (currEmergency) currEmergency.innerHTML = money(filterEmergency);
     if (currExpenses) currExpenses.innerHTML = money(filterExpenses);
     
-    // Net result of applied filters (Group + Emergency)
-    if (currMonthTotal) currMonthTotal.innerHTML = money(filterGroup + filterEmergency);
+    if (currMonthTotal) {
+        currMonthTotal.innerHTML = money(finalFilterBalance);
+        if (selectedType === "expense" || selectedType === "Expense") {
+            currMonthTotal.style.color = "#c53030"; // اخراجات کے لیے سرخ رنگ
+        } else {
+            currMonthTotal.style.color = "#2f855a"; // دیگر کے لیے سبز رنگ
+        }
+    }
 
-    // Dynamic Label text modification to give active hint to user
     if (lblCurrMonth) {
-        const activeSearch = searchInput && searchInput.value ? 'سرچ شدہ' : 'منتخب';
-        lblCurrMonth.innerHTML = `موجودہ ${activeSearch} فلٹر کا لائیو رزلٹ`;
+        let activeLabel = "تمام اندراجات کا نتیجہ";
+        if (selectedType === "group" || selectedType === "Group Fund") activeLabel = "صرف گروپ فنڈز کا نتیجہ";
+        else if (selectedType === "emergency" || selectedType === "Emergency Fund") activeLabel = "صرف ایمرجنسی فنڈز کا نتیجہ";
+        else if (selectedType === "expense" || selectedType === "Expense") activeLabel = "صرف اخراجات کا نتیجہ";
+
+        lblCurrMonth.innerHTML = activeLabel;
     }
 }
 
@@ -287,6 +325,7 @@ function renderFilteredTable() {
     tableBody.innerHTML = "";
     let sr = 1;
 
+    // Group items by Date while preserving ascending sorted sequence
     const groups = {};
     filteredData.forEach(item => {
         if (!item.Date) return;
@@ -297,12 +336,12 @@ function renderFilteredTable() {
     Object.keys(groups).forEach(date => {
         const list = groups[date];
 
-        // Deduct expenses from the daily total calculation
+        // Deduct expenses from daily total calculation
         const total = list.reduce((sum, item) => {
             const amt = Math.max(0, Number(item.Amount || 0));
             const type = String(item.Type || "").trim();
 
-            if (type === "Expense") {
+            if (type === "Expense" || type === "expense") {
                 return sum - amt;
             } else {
                 return sum + amt;
@@ -313,26 +352,27 @@ function renderFilteredTable() {
             const tr = document.createElement("tr");
             
             let typeUrdu = "گروپ";
-            let badgeColor = "#718096";
+            let badgeColor = "#2b6cb0";
             
-            if (item.Type === "Emergency Fund") {
+            if (item.Type === "Emergency Fund" || item.Type === "emergency") {
                 typeUrdu = "ایمرجنسی";
                 badgeColor = "#b7791f";
-            } else if (item.Type === "Expense") {
+            } else if (item.Type === "Expense" || item.Type === "expense") {
                 typeUrdu = "اخراجات";
                 badgeColor = "#c53030";
             }
 
             const currentTypeFilter = fundTypeFilter ? fundTypeFilter.value : "both";
-            const typeLabel = currentTypeFilter === "both" ? 
-                ` <small style="color:${badgeColor}; font-size:0.75rem;">(${typeUrdu})</small>` : '';
+            const typeLabel = (currentTypeFilter === "both" || currentTypeFilter === "") ? 
+                ` <small style="color:${badgeColor}; font-size:0.8rem; font-weight:bold;">(${typeUrdu})</small>` : '';
 
-            const expenseRowStyle = item.Type === "Expense" ? 'style="color: #c53030; font-weight: 500;"' : '';
+            const isExpense = (item.Type === "Expense" || item.Type === "expense");
+            const expenseRowStyle = isExpense ? 'style="color: #c53030; font-weight: 600;"' : '';
 
             let html = `
                 <td>${sr++}</td>
                 <td style="text-align:right" ${expenseRowStyle}>${item.Name || ""}${typeLabel}</td>
-                <td class="amount" ${expenseRowStyle}>${item.Type === "Expense" ? "-" : ""}${money(Math.max(0, item.Amount))}</td>
+                <td class="amount" ${expenseRowStyle}>${isExpense ? "-" : ""}${money(Math.max(0, item.Amount))}</td>
             `;
 
             if (index === 0) {
@@ -340,7 +380,7 @@ function renderFilteredTable() {
                     <td rowspan="${list.length}" class="date">
                         ${formatDate(date)}
                     </td>
-                    <td rowspan="${list.length}" class="daily-total">
+                    <td rowspan="${list.length}" class="daily-total" style="font-weight:bold;">
                         ${money(total)}
                     </td>
                 `;
