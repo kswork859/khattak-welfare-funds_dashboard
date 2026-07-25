@@ -364,7 +364,7 @@ function renderFilteredTable() {
 
             const currentTypeFilter = fundTypeFilter ? fundTypeFilter.value : "both";
             const typeLabel = (currentTypeFilter === "both" || currentTypeFilter === "") ? 
-                ` <small style="color:${badgeColor}; font-size:0.8rem; font-weight:bold;">(${typeUrdu})</small>` : '';
+                ` <small style="color:${badgeColor}; font-size:8px; font-weight:normal;">(${typeUrdu})</small>` : '';
 
             const isExpense = (item.Type === "Expense" || item.Type === "expense");
             const expenseRowStyle = isExpense ? 'style="color: #c53030; font-weight: 600;"' : '';
