@@ -33,15 +33,57 @@
     right:-100px;
 }
 
-.admin-title{
-    text-align:center;
-    color:#fff;
-    font-size:20px;
-    font-weight:bold;
-    margin-bottom:40px;
-    position:relative;
-    z-index:2;
+/* ================= شعر اور ٹائٹل کی ڈیکوریشن ================= */
+.header-box {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 40px;
 }
+
+.main-title {
+    color: #fff;
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.poetry-box {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-right: 4px solid #ffb703;
+    border-left: 4px solid #ffb703;
+    padding: 18px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    position: relative;
+    max-width: 90%;
+}
+
+/* شعر کے سائیڈ والے کوٹس (Quotes) */
+.poetry-box::before, .poetry-box::after {
+    color: #ffb703;
+    font-size: 28px;
+    line-height: 0;
+    position: absolute;
+    top: 50%;
+}
+.poetry-box::before { content: '‘‘'; right: 10px; }
+.poetry-box::after { content: '’’'; left: 10px; }
+
+.poetry-text {
+    color: #ffd166;
+    font-size: 20px;
+    line-height: 2.2;
+    margin: 0;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(255, 183, 3, 0.3);
+}
+
+/* ========================================================== */
 
 .admin-grid{
     display:grid;
@@ -137,9 +179,13 @@ transform:translateY(0);
 }
 
 @media(max-width:600px){
+.main-title{
+font-size:22px;
+}
 
-.admin-title{
-font-size:26px;
+.poetry-text{
+font-size:17px;
+line-height:2;
 }
 
 .admin-card{
@@ -160,9 +206,14 @@ font-size:20px;
 
 <div class="admin-section">
 
-<div class="admin-title">
-خٹک ویلفیئر گروپ نکہ افغانان <br>
-ہماری ٹیم ، اپکی خدمت میں ہر وقت کوشاں
+<div class="header-box">
+    <div class="main-title">خٹک ویلفیئر گروپ نکہ افغانان</div>
+    <div class="poetry-box">
+        <p class="poetry-text">
+            محبت مجھے ان جوانوں سے ہے<br>
+            ستاروں پر جو ڈالتے ہیں کمند
+        </p>
+    </div>
 </div>
 
 <div class="admin-grid">
@@ -196,7 +247,6 @@ font-size:20px;
 <div class="admin-name">خرم شہزاد</div>
 <div class="admin-designation">ویب سائٹ ڈیولپر</div>
 </div>
-
 
 <div class="admin-card">
 <img src="images/admins/imran.jpg">
@@ -233,7 +283,6 @@ font-size:20px;
 <div class="admin-name">محمد نواز</div>
 <div class="admin-designation">ایڈمن</div>
 </div>
-
 
 </div>
 </div>
