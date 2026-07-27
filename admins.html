@@ -1,0 +1,239 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@200;600&display=swap');
+
+.admin-section{
+    direction:rtl;
+    font-family:'Noto Nastaliq Urdu',serif;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    padding:40px 20px;
+    border-radius:25px;
+    overflow:hidden;
+    position:relative;
+}
+
+.admin-section:before{
+    content:'';
+    position:absolute;
+    width:350px;
+    height:350px;
+    background:rgba(255,255,255,.06);
+    border-radius:50%;
+    top:-120px;
+    left:-120px;
+}
+
+.admin-section:after{
+    content:'';
+    position:absolute;
+    width:300px;
+    height:300px;
+    background:rgba(255,255,255,.04);
+    border-radius:50%;
+    bottom:-120px;
+    right:-100px;
+}
+
+.admin-title{
+    text-align:center;
+    color:#fff;
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:40px;
+    position:relative;
+    z-index:2;
+}
+
+.admin-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+    position:relative;
+    z-index:2;
+}
+
+.admin-card{
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:22px;
+    padding:25px 20px;
+    text-align:center;
+    color:#fff;
+    transition:.45s;
+    animation:float 5s ease-in-out infinite;
+    box-shadow:0 12px 35px rgba(0,0,0,.25);
+}
+
+.admin-card:hover{
+    transform:translateY(-12px) scale(1.04);
+    background:rgba(255,255,255,.18);
+    box-shadow:0 20px 40px rgba(0,0,0,.35);
+}
+
+.admin-card img{
+    width:120px;
+    height:120px;
+    object-fit:cover;
+    border-radius:50%;
+    border:5px solid #fff;
+    margin-bottom:18px;
+    transition:.5s;
+}
+
+.admin-card:hover img{
+    transform:rotate(6deg) scale(1.08);
+}
+
+.admin-name{
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.admin-designation{
+    display:inline-block;
+    background:#ffb703;
+    color:#111;
+    padding:8px 18px;
+    border-radius:30px;
+    font-size:16px;
+    font-weight:bold;
+}
+
+@keyframes float{
+0%{transform:translateY(0px);}
+50%{transform:translateY(-8px);}
+100%{transform:translateY(0px);}
+}
+
+.admin-card{
+opacity:0;
+animation:
+fade .8s forwards,
+float 5s ease-in-out infinite;
+}
+
+.admin-card:nth-child(1){animation-delay:.2s,.2s;}
+.admin-card:nth-child(2){animation-delay:.4s,.4s;}
+.admin-card:nth-child(3){animation-delay:.6s,.6s;}
+.admin-card:nth-child(4){animation-delay:.8s,.8s;}
+.admin-card:nth-child(5){animation-delay:1s,1s;}
+.admin-card:nth-child(6){animation-delay:1.2s,1.2s;}
+.admin-card:nth-child(7){animation-delay:1.4s,1.4s;}
+.admin-card:nth-child(8){animation-delay:1.6s,1.6s;}
+.admin-card:nth-child(9){animation-delay:1.8s,1.8s;}
+.admin-card:nth-child(10){animation-delay:2s,2s;}
+.admin-card:nth-child(11){animation-delay:2.2s,2.2s;}
+
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(60px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+@media(max-width:600px){
+
+.admin-title{
+font-size:26px;
+}
+
+.admin-card{
+padding:20px;
+}
+
+.admin-card img{
+width:100px;
+height:100px;
+}
+
+.admin-name{
+font-size:20px;
+}
+
+}
+</style>
+
+<div class="admin-section">
+
+<div class="admin-title">
+خٹک ویلفیئر گروپ نکہ افغانان <br>
+ہماری ٹیم ، اپکی خدمت میں ہر وقت کوشاں
+</div>
+
+<div class="admin-grid">
+
+<div class="admin-card">
+<img src="images/admins/muddasir.jpg">
+<div class="admin-name">مدثر فرید</div>
+<div class="admin-designation">صدر اینڈ چیف</div>
+</div>
+
+<div class="admin-card">
+<img src="images/admins/shabeer-hussain.png">
+<div class="admin-name">شبیر حسین خٹک</div>
+<div class="admin-designation">اکاؤنٹنٹ</div>
+</div>
+
+<div class="admin-card">
+<img src="images/admins/image.png">
+<div class="admin-name">ہارون اقبال ارمانی</div>
+<div class="admin-designation">فائنانس سیکرٹری</div>
+</div>
+
+<div class="admin-card">
+<img src="YOUR_IMAGE_URL_HERE">
+<div class="admin-name">محمد اسد</div>
+<div class="admin-designation">سوشل میڈیا مینیجر</div>
+</div>
+
+<div class="admin-card">
+<img src="https://avatars.githubusercontent.com/u/162346590?v=4">
+<div class="admin-name">خرم شہزاد</div>
+<div class="admin-designation">ویب سائٹ ڈیولپر</div>
+</div>
+
+
+<div class="admin-card">
+<img src="images/admins/imran.jpg">
+<div class="admin-name">محمد عمران خان</div>
+<div class="admin-designation">ایڈمن</div>
+</div>
+
+<div class="admin-card">
+<img src="images/admins/nabiullah.jpeg">
+<div class="admin-name">محمد نبی اللہ خان</div>
+<div class="admin-designation">ایڈمن</div>
+</div>
+
+<div class="admin-card">
+<img src="images/admins/WaqasNadeem.jpeg">
+<div class="admin-name">وقاص ندیم</div>
+<div class="admin-designation">ایڈمن</div>
+</div>
+
+<div class="admin-card">
+<img src="images/admins/jaffarkhattak.png">
+<div class="admin-name">جعفر خٹک</div>
+<div class="admin-designation">ایڈمن</div>
+</div>
+
+<div class="admin-card">
+<img src="images/admins/admin.jpeg">
+<div class="admin-name">تصدق خان</div>
+<div class="admin-designation">ایڈمن</div>
+</div>
+
+<div class="admin-card">
+<img src="YOUR_IMAGE_URL_HERE">
+<div class="admin-name">محمد نواز</div>
+<div class="admin-designation">ایڈمن</div>
+</div>
+
+
+</div>
+</div>
