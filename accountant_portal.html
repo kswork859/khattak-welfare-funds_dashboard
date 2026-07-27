@@ -634,47 +634,17 @@
     }
 
     function updateUI() {
-  if (records.length === 0) {
-    recordsTableBody.innerHTML = `
-      <tr id="emptyRow">
-        <td colspan="6" style="text-align: center; color: #94a3b8; padding: 24px;">
-          No items added yet. Fill the form above to add items to this batch.
-        </td>
-      </tr>`;
-    saveBtn.disabled = true;
-    totalAmountEl.textContent = "0.00";
-    return;
-  }
-
-  saveBtn.disabled = false;
-  recordsTableBody.innerHTML = "";
-
-  let total = 0;
-
-  records.forEach(record => {
-    // Subtract amount if Type is Expense; otherwise add it
-    if (record.Type === "Expense") {
-      total -= record.Amount;
-    } else {
-      total += record.Amount;
-    }
-
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td data-label="Date">${record.Date}</td>
-      <td data-label="Name (نام)" class="urdu-text">${record.Name}</td>
-      <td data-label="Amount">${record.Type === "Expense" ? '-' : ''}${record.Amount.toFixed(2)}</td>
-      <td data-label="Type">${record.Type}</td>
-      <td data-label="Deduct From">${record.Deduct_From || '-'}</td>
-      <td data-label="Action">
-        <button class="btn btn-danger" onclick="removeRecord(${record.id})">Remove</button>
-      </td>
-    `;
-    recordsTableBody.appendChild(row);
-  });
-
-  totalAmountEl.textContent = total.toFixed(2);
-}
+      if (records.length === 0) {
+        recordsTableBody.innerHTML = `
+          <tr id="emptyRow">
+            <td colspan="6" style="text-align: center; color: #94a3b8; padding: 24px;">
+              No items added yet. Fill the form above to add items to this batch.
+            </td>
+          </tr>`;
+        saveBtn.disabled = true;
+        totalAmountEl.textContent = "0.00";
+        return;
+      }
 
       saveBtn.disabled = false;
       recordsTableBody.innerHTML = "";
@@ -682,12 +652,18 @@
       let total = 0;
 
       records.forEach(record => {
-        total += record.Amount;
+        // Subtract expense amounts, add other types
+        if (record.Type === "Expense") {
+          total -= record.Amount;
+        } else {
+          total += record.Amount;
+        }
+
         const row = document.createElement("tr");
         row.innerHTML = `
           <td data-label="Date">${record.Date}</td>
           <td data-label="Name (نام)" class="urdu-text">${record.Name}</td>
-          <td data-label="Amount">${record.Amount.toFixed(2)}</td>
+          <td data-label="Amount">${record.Type === "Expense" ? '-' : ''}${record.Amount.toFixed(2)}</td>
           <td data-label="Type">${record.Type}</td>
           <td data-label="Deduct From">${record.Deduct_From || '-'}</td>
           <td data-label="Action">
