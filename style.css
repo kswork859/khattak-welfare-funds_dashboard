@@ -542,8 +542,10 @@ Mobile Layout
     }
 
     .date-range-group {
+       flex-direction: column;
         width: 100%;
-        justify-content: space-between;
+       justify-content: space-around;
+        align-item: flex-start;
     }
 
     .date-range-group input[type="date"] {
