@@ -14,27 +14,24 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
-    
-    <!-- Custom Layout Rules to guarantee the exact row positioning -->
+
+    <!-- Custom Layout Rules for Filter Result Card Spacing -->
     <style>
-        .summary {
+        .filter-summary-card .summary-item {
             display: flex;
-            flex-direction: column;
-            gap: 20px;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin: 8px 0;
         }
-        .summary-row-1 {
-            display: grid;
-            grid-template-columns: 1fr;
+        .filter-summary-card .summary-item span {
+            unicode-bidi: embed;
         }
-        .summary-row-2 {
-            display: flex;
-            justify-content: space-around;
-            gap: 20px;
-        }
-        .summary-row-3 {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
+        #dateRangeText {
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -71,7 +68,7 @@
 
             <!-- SECOND ROW: Core Operational Cards Breakdown -->
             <div class="summary-row-2">
-                
+
                 <!-- Total Collections -->
                 <div class="card" id="kul-amdan">
                     <span class="label">کل آمدنی (فنڈز جمع شدہ)</span>
@@ -103,21 +100,17 @@
         <!-- Toolbar -->
         <section class="toolbar">
             <input type="text" id="searchInput" placeholder="نام سے تلاش کریں...">
+
             <div class="filter-group">
-                <!-- نیا شامل کردہ Category/Type Filter -->
-                <select id="typeFilter">
-                    <option value="">تمام اندراجات (All)</option>
-                    <option value="group">گروپ فنڈ (Group Fund)</option>
-                    <option value="emergency">ایمرجنسی فنڈ (Emergency Fund)</option>
-                    <option value="expense">اخراجات (Expenses)</option>
-                </select>
-                <select id="yearFilter">
-                    <option value="">سال منتخب کریں (All)</option>
-                </select>
-                <select id="monthFilter">
-                    <option value="">مہینہ منتخب کریں (All)</option>
-                </select>
+                <!-- Date Range Filters (English Labels) -->
+                <div class="date-range-group">
+                    <label for="startDate">From:</label>
+                    <input type="date" id="startDate" name="startDate">
+                    <label for="endDate">To:</label>
+                    <input type="date" id="endDate" name="endDate">
+                </div>
             </div>
+
             <button id="printBtn">🖨 پرنٹ</button>
         </section>
 
@@ -143,20 +136,50 @@
         <div class="summary-row-3">
 
             <!-- Filter Result Card -->
-            <div class="card monthly-card" style="background-color: #f7fafc; border-right: 5px solid #2b6cb0;">
-                <span class="label" id="lblCurrMonth" style="font-weight: bold; color: #2d3748;">موجودہ منتخب فلٹر کا رزلٹ</span>
-                
-                <h3 id="rowGroup">گروپ فنڈ : <span id="currGroup">0</span></h3>
-                <h3 id="rowEmergency">ایمرجنسی فنڈ : <span id="currEmergency">0</span></h3>
-                <h3 id="rowExpense" style="color:#c53030;">اخراجات : <span id="currExpenses">0</span></h3>
-                
+            <div class="card monthly-card filter-summary-card">
+
+                <span class="label" id="lblCurrMonth">
+                    موجودہ منتخب فلٹر کا رزلٹ
+                </span>
+
+                <!-- Date Range Line Indicator -->
+                <p id="dateRangeText" style="display:none;"></p>
+
+                <!-- Previous Balance (Visible only for Date Range filter) -->
+                <h3 id="rowPrevBalance" class="summary-item previous" style="display:none;">
+                    <span>سابقہ رقم</span>
+                    <span id="currPrevBalance">0</span>
+                </h3>
+
+                <h3 id="rowGroup" class="summary-item">
+                    <span>گروپ فنڈ </span>
+                    <span id="currGroup">0</span>
+                </h3>
+
+                <h3 id="rowEmergency" class="summary-item">
+                    <span>ایمرجنسی فنڈ </span>
+                    <span id="currEmergency">0</span>
+                </h3>
+
+                <h3 id="rowExpense" class="summary-item expense">
+                    <span>اخراجات </span>
+                    <span id="currExpenses">0</span>
+                </h3>
+
                 <hr>
-                <span style="font-weight: bold;">فلٹر شدہ صافی بیلنس</span>
-                <h2 id="currMonthTotal" style="color:#2f855a;">0</h2>
+
+                <span id="lblGrandTotal" class="grand-total-label">
+                    فلٹر شدہ صافی بیلنس (گرینڈ ٹوٹل)
+                </span>
+
+                <h2 id="currMonthTotal" class="grand-total-value">
+                    0
+                </h2>
+
             </div>
 
         </div>
-
+        
         <!-- Footer -->
         <footer>
             <p>
