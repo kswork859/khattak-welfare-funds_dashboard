@@ -109,8 +109,8 @@ Summary Layout & Grid System
 }
 
 .summary-row-2 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    justify-content: space-around;
     gap: 20px;
 }
 
