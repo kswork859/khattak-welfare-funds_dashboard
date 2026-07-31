@@ -82,6 +82,7 @@ Header & Banner Fix
 }
 
 .header h1 {
+    font-family: 'urdu font', 'Jameel Noori', serif;
     font-size: 42px;
     margin-bottom: 8px;
     font-weight: normal;
@@ -138,6 +139,7 @@ Summary Layout & Grid System
 }
 
 .card.header-span {
+    font-family: 'urdu font', 'Jameel Noori', serif;
     grid-column: 1 / -1;
     background: #edf2f7 !important;
     color: #4a5568;
@@ -155,6 +157,7 @@ Summary Layout & Grid System
 }
 
 .card .label {
+    font-family: 'urdu font', 'Jameel Noori', serif;
     display: block;
     color: #555;
     font-size: 22px;
@@ -163,6 +166,7 @@ Summary Layout & Grid System
 }
 
 .card h2 {
+    font-family: 'urdu font', 'Jameel Noori', serif;
     color: #0B6E4F;
     font-size: 34px;
     font-weight: bold;
@@ -172,6 +176,7 @@ Summary Layout & Grid System
 /* Spacing & Readability Fix for Filtered Result Items */
 .card h3, 
 .summary-item {
+    font-family: 'urdu font', 'Jameel Noori', serif;
     font-size: 1.15rem;
     color: #2d3748;
     margin: 12px 0;
@@ -218,6 +223,7 @@ Summary Layout & Grid System
 
 .monthly-card #lblCurrMonth,
 .filter-summary-card .label {
+    font-family: 'urdu font', 'Jameel Noori', serif;
     font-size: 20px;
     color: #2b6cb0;
     border-bottom: 2px solid #edf2f7;
@@ -228,6 +234,7 @@ Summary Layout & Grid System
 }
 
 .grand-total-label {
+    font-family: 'urdu font', 'Jameel Noori', serif;
     display: block;
     font-weight: bold;
     color: #2d3748;
@@ -237,6 +244,7 @@ Summary Layout & Grid System
 
 .grand-total-value,
 .monthly-card h2 {
+    font-family: 'urdu font', 'Jameel Noori', serif;
     color: #2f855a;
     font-size: 36px;
     margin-top: 8px;
@@ -289,10 +297,10 @@ Toolbar & Filters
 }
 
 .date-range-group label {
+    font-family: 'urdu font', sans-serif;
     font-size: 0.9rem;
     font-weight: 600;
     color: #4a5568;
-    font-family: sans-serif;
 }
 
 .date-range-group input[type="date"] {
@@ -325,6 +333,7 @@ Toolbar & Filters
 }
 
 #printBtn {
+    font-family: 'urdu font', 'Jameel Noori', serif;
     background: #0B6E4F;
     color: white;
     border: none;
@@ -332,7 +341,6 @@ Toolbar & Filters
     border-radius: 8px;
     cursor: pointer;
     font-size: 18px;
-    font-family: inherit;
     transition: .2s;
     font-weight: bold;
 }
@@ -366,6 +374,7 @@ thead {
 }
 
 thead th {
+    font-family: 'urdu font', 'Jameel Noori', serif;
     background: #0B6E4F;
     color: white;
     padding: 16px;
