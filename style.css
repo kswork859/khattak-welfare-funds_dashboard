@@ -121,7 +121,9 @@ Summary Layout & Grid System
     gap: 20px;
     margin-top: 10px;
 }
-
+.khan-div{
+   width: 100%;
+}
 .card {
     width: 100%;
     background: white;
