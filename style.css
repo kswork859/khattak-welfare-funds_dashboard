@@ -123,6 +123,9 @@ Summary Layout & Grid System
 }
 .khan-div{
    width: 100%;
+       display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 .card {
     width: 100%;
