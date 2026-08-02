@@ -4,7 +4,7 @@
 ==================================*/
 
 #kul-amdan {
-    display: none;
+    
 }
 
 * {
@@ -413,12 +413,14 @@ tbody td:nth-child(2) {
 }
 
 .amount {
+   direction: ltr;
     font-weight: bold;
     color: #0B6E4F;
     letter-spacing: 0.5px;
 }
 
 .daily-total {
+   direction: ltr;
     background: #fffcf0;
     font-weight: bold;
     letter-spacing: 0.5px;
