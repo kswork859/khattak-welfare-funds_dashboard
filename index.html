@@ -10,8 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400..700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400..700&display=swap" rel="stylesheet">
     <link href='https://kswork859.github.io/blogger-urdu-fonts/font.css' rel='stylesheet'/>
 
     <link rel="stylesheet" href="style.css">
@@ -34,6 +33,16 @@
             margin-bottom: 12px;
             font-weight: 600;
         }
+        .type-filter-select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e0;
+            font-family: 'Noto Nastaliq Urdu', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            background-color: #ffffff;
+            color: #2d3748;
+        }
     </style>
 </head>
 
@@ -53,10 +62,7 @@
             <img src="images/banner.png" alt="Khattak Welfare Group Banner" class="header-banner">
         </header>
 
-        <!-- ==========================
-             Dashboard Summary
-        =========================== -->
-
+        <!-- Dashboard Summary -->
         <section class="summary">
 
             <!-- FIRST ROW: Total Fund -->
@@ -69,35 +75,30 @@
 
             <!-- SECOND ROW: Core Operational Cards Breakdown -->
             <div class="summary-row-2">
-
-                <!-- Total Collections -->
                 <div class="khan-div">
-                
+                    <!-- Group Fund -->
+                    <div class="card">
+                        <span class="label">موجودہ گروپ فنڈ</span>
+                        <h2 id="totalGroupFund" style="color:#2b6cb0;">0</h2>
+                    </div>
 
-                <!-- Group Fund -->
-                <div class="card">
-                    <span class="label">موجودہ گروپ فنڈ</span>
-                    <h2 id="totalGroupFund" style="color:#2b6cb0;">0</h2>
-                </div>
-
-                <!-- Emergency Fund -->
-                <div class="card">
-                    <span class="label">موجودہ ایمرجنسی فنڈ</span>
-                    <h2 id="totalEmergencyFund" style="color:#b7791f;">0</h2>
-                </div>
+                    <!-- Emergency Fund -->
+                    <div class="card">
+                        <span class="label">موجودہ ایمرجنسی فنڈ</span>
+                        <h2 id="totalEmergencyFund" style="color:#b7791f;">0</h2>
+                    </div>
                 </div>
 
                 <!-- Total Expenses -->
                 <div class="khan-div">
                     <div class="card" id="kul-amdan">
-                    <span class="label">جمع شدہ رقم</span>
-                    <h2 id="totalCollection" style="color:#2f855a;">0</h2>
-                </div>
-                <div class="card">
-                    <span class="label"> خرچ شدہ رقم</span>
-                    <h2 id="totalExpenses" style="color:#c53030;">0</h2>
-                </div>
-
+                        <span class="label">جمع شدہ رقم</span>
+                        <h2 id="totalCollection" style="color:#2f855a;">0</h2>
+                    </div>
+                    <div class="card">
+                        <span class="label">خرچ شدہ رقم</span>
+                        <h2 id="totalExpenses" style="color:#c53030;">0</h2>
+                    </div>
                 </div>
             </div>
 
@@ -107,8 +108,17 @@
         <section class="toolbar">
             <input type="text" id="searchInput" placeholder="نام سے تلاش کریں...">
 
+            <!-- Category / Type Filter Dropdown -->
+            <select id="typeFilter" class="type-filter-select">
+                <option value="all">تمام ریکارڈز (All)</option>
+                <option value="group_fund">صرف گروپ فنڈ (Group Fund)</option>
+                <option value="emergency_fund">صرف ایمرجنسی فنڈ (Emergency Fund)</option>
+                <option value="all_expense">تمام اخراجات (Total Expenses)</option>
+                <option value="group_expense">گروپ فنڈ اخراجات (Group Fund Expenses)</option>
+                <option value="emergency_expense">ایمرجنسی فنڈ اخراجات (Emergency Fund Expenses)</option>
+            </select>
+
             <div class="filter-group">
-                <!-- Date Range Filters (English Labels) -->
                 <div class="date-range-group">
                     <label for="startDate">From:</label>
                     <input type="date" id="startDate" name="startDate">
@@ -148,28 +158,33 @@
                     موجودہ منتخب فلٹر کا رزلٹ
                 </span>
 
-                <!-- Date Range Line Indicator -->
                 <p id="dateRangeText" style="display:none;"></p>
 
-                <!-- Previous Balance (Visible only for Date Range filter) -->
+                <!-- Previous Balance -->
                 <h3 id="rowPrevBalance" class="summary-item previous" style="display:none;">
                     <span>سابقہ رقم</span>
                     <span id="currPrevBalance">0</span>
                 </h3>
 
                 <h3 id="rowGroup" class="summary-item">
-                    <span>گروپ فنڈ </span>
+                    <span>گروپ فنڈ (آمدن)</span>
                     <span id="currGroup">0</span>
                 </h3>
 
                 <h3 id="rowEmergency" class="summary-item">
-                    <span>ایمرجنسی فنڈ </span>
+                    <span>ایمرجنسی فنڈ (آمدن)</span>
                     <span id="currEmergency">0</span>
                 </h3>
 
-                <h3 id="rowExpense" class="summary-item expense">
-                    <span>اخراجات </span>
-                    <span id="currExpenses">0</span>
+                <!-- Separated Expenses Breakdown -->
+                <h3 id="rowGroupExpense" class="summary-item expense">
+                    <span>گروپ فنڈ اخراجات</span>
+                    <span id="currGroupExpenses">0</span>
+                </h3>
+
+                <h3 id="rowEmergencyExpense" class="summary-item expense">
+                    <span>ایمرجنسی فنڈ اخراجات</span>
+                    <span id="currEmergencyExpenses">0</span>
                 </h3>
 
                 <hr>
@@ -185,7 +200,7 @@
             </div>
 
         </div>
-        
+
         <!-- Footer -->
         <footer>
             <p>
