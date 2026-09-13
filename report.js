@@ -16,7 +16,7 @@ const reportContainer = document.getElementById("reportContainer");
 const tableBody = document.getElementById("fundTableBody");
 const reportMonth = document.getElementById("reportMonth");
 
-// Summary Dynamic Card References (کل ریکارڈز - لائف ٹائم ڈیٹا)
+// Summary Dynamic Card References (لائف ٹائم ڈیٹا)
 const totalGroupFund = document.getElementById("totalGroupFund");
 const totalEmergencyFund = document.getElementById("totalEmergencyFund");
 const totalCollection = document.getElementById("totalCollection");
@@ -24,19 +24,25 @@ const totalExpenses = document.getElementById("totalExpenses");
 const closingBalance = document.getElementById("closingBalance"); 
 const totalEntries = document.getElementById("totalEntries");    
 
-// Target Filtering Elements (فلٹر شدہ رزلٹ کارڈ کے نوڈز)
+// Target Filtering Elements
 const lblCurrMonth = document.getElementById("lblCurrMonth");
 const currGroup = document.getElementById("currGroup");
 const currEmergency = document.getElementById("currEmergency");
-const currExpenses = document.getElementById("currExpenses"); 
+const currGroupExpenses = document.getElementById("currGroupExpenses"); 
+const currEmergencyExpenses = document.getElementById("currEmergencyExpenses"); 
 const currMonthTotal = document.getElementById("currMonthTotal");
-const dateRangeText = document.getElementById("dateRangeText"); // Date Range Dynamic Line
+const dateRangeText = document.getElementById("dateRangeText");
 
 const rowPrevBalance = document.getElementById("rowPrevBalance");
 const currPrevBalance = document.getElementById("currPrevBalance");
+const rowGroup = document.getElementById("rowGroup");
+const rowEmergency = document.getElementById("rowEmergency");
+const rowGroupExpense = document.getElementById("rowGroupExpense");
+const rowEmergencyExpense = document.getElementById("rowEmergencyExpense");
 
 // Target Filtering Inputs
 const searchInput = document.getElementById("searchInput");
+const typeFilter = document.getElementById("typeFilter");
 const startDateInput = document.getElementById("startDate");
 const endDateInput = document.getElementById("endDate");
 const printBtn = document.getElementById("printBtn");
@@ -46,7 +52,7 @@ const printBtn = document.getElementById("printBtn");
 ========== */
 let rawData = [];
 let filteredData = [];
-let previousBalance = 0; // Selected Start Date se pehle ka total balance
+let previousBalance = 0;
 
 /* ==========
    URL Parameter Mapping & Initialization
@@ -77,6 +83,28 @@ function hideLoading() {
 }
 
 /* ==========
+   Default Date Setter (Current Month)
+========== */
+function setDefaultCurrentMonthDates() {
+    const now = new Date();
+    
+    // موجودہ مہینے کی پہلی تاریخ (YYYY-MM-01)
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const firstDayStr = firstDay.toISOString().split('T')[0];
+    
+    // موجودہ مہینے کی آخری تاریخ
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const lastDayStr = lastDay.toISOString().split('T')[0];
+    
+    if (startDateInput && !startDateInput.value) {
+        startDateInput.value = firstDayStr;
+    }
+    if (endDateInput && !endDateInput.value) {
+        endDateInput.value = lastDayStr;
+    }
+}
+
+/* ==========
    Fetch Data Pipelines
 ========== */
 async function loadReport() {
@@ -86,6 +114,9 @@ async function loadReport() {
         if (!response.ok) throw new Error("Network Error");
 
         rawData = await response.json();
+
+        // بائی ڈیفالٹ موجودہ مہینے کی تاریخیں سیٹ کریں
+        setDefaultCurrentMonthDates();
 
         applyFilters(); 
         hideLoading();
@@ -122,12 +153,11 @@ function applyFilters() {
     const rows = getRecords();
 
     const keyword = (searchInput && searchInput.value) ? searchInput.value.trim().toLowerCase() : "";
+    const selectedType = (typeFilter && typeFilter.value) ? typeFilter.value : "all";
     
-    // Parse input dates in Local Time to avoid UTC timezone offset issues
     const startDateVal = (startDateInput && startDateInput.value) ? new Date(startDateInput.value + "T00:00:00") : null;
     const endDateVal = (endDateInput && endDateInput.value) ? new Date(endDateInput.value + "T23:59:59.999") : null;
 
-    // Re-initialize previous balance
     previousBalance = 0;
 
     // 1. Process main filtered dataset & compute Previous Balance
@@ -138,6 +168,24 @@ function applyFilters() {
             ok = String(item.Name || "").toLowerCase().includes(keyword);
         }
 
+        const type = String(item.Type || "").trim();
+        const deductFrom = String(item.Deduct_From || "").trim();
+
+        // Specific Type Dropdown Filtering
+        if (ok) {
+            if (selectedType === "group_fund") {
+                ok = (type !== "Emergency Fund" && type !== "emergency" && type !== "Expense" && type !== "expense");
+            } else if (selectedType === "emergency_fund") {
+                ok = (type === "Emergency Fund" || type === "emergency");
+            } else if (selectedType === "all_expense") {
+                ok = (type === "Expense" || type === "expense");
+            } else if (selectedType === "group_expense") {
+                ok = (type === "Expense" || type === "expense") && (deductFrom !== "Emergency Fund");
+            } else if (selectedType === "emergency_expense") {
+                ok = (type === "Expense" || type === "expense") && (deductFrom === "Emergency Fund");
+            }
+        }
+
         // Parse item date
         let itemDate = null;
         if (item.Date) {
@@ -145,13 +193,11 @@ function applyFilters() {
             itemDate = new Date(rawDateStr.includes("T") ? rawDateStr : rawDateStr + "T00:00:00");
         }
 
-        // Calculate Previous Balance (if item date is strictly before startDateVal)
+        // Calculate Previous Balance (Selected Start Date سے پہلے تمام فنڈز اور اخراجات کا بیلنس)
         if (startDateVal && itemDate && !isNaN(itemDate.getTime())) {
             if (itemDate < startDateVal) {
                 const amt = Math.max(0, Number(item.Amount || 0));
-                const itemType = String(item.Type || "").trim();
-
-                if (itemType === "Expense" || itemType === "expense") {
+                if (type === "Expense" || type === "expense") {
                     previousBalance -= amt;
                 } else {
                     previousBalance += amt;
@@ -172,7 +218,7 @@ function applyFilters() {
         return ok;
     });
 
-    // 2. Perform Date Ascending Sort
+    // 2. Date Ascending Sort
     filteredData.sort((a, b) => new Date(a.Date) - new Date(b.Date));
 
     // 3. Perform Calculations & Display Updates
@@ -185,7 +231,7 @@ function applyFilters() {
 ========== */
 function calculateSummaryAndFilteredResults(allRows, filteredRows) {
     
-    // A. CALCULATE GLOBAL METRICS
+    // A. CALCULATE GLOBAL METRICS (Lifetime Cards)
     let globalGroupFund = 0;
     let globalEmergencyFund = 0;
     let globalExpenseTotal = 0;
@@ -195,9 +241,9 @@ function calculateSummaryAndFilteredResults(allRows, filteredRows) {
         const type = String(item.Type || "").trim();
         const deductFrom = String(item.Deduct_From || "").trim();
 
-        if (type === "Emergency Fund") {
+        if (type === "Emergency Fund" || type === "emergency") {
             globalEmergencyFund += amount;
-        } else if (type === "Expense") {
+        } else if (type === "Expense" || type === "expense") {
             globalExpenseTotal += amount;
             if (deductFrom === "Emergency Fund") {
                 globalEmergencyFund -= amount;
@@ -222,25 +268,31 @@ function calculateSummaryAndFilteredResults(allRows, filteredRows) {
     if (closingBalance) closingBalance.innerHTML = money(netClosingBalance);
     if (totalEntries) totalEntries.innerHTML = filteredRows.length;
 
-    // B. CALCULATE DYNAMIC FILTER RESULTS
+    // B. CALCULATE DYNAMIC FILTER RESULTS (Current Selected Month/Filter)
     let filterGroup = 0;
     let filterEmergency = 0;
-    let filterExpenses = 0;
+    let filterGroupExpenses = 0;
+    let filterEmergencyExpenses = 0;
 
     filteredRows.forEach(item => {
         const amount = Math.max(0, Number(item.Amount || 0));
         const type = String(item.Type || "").trim();
+        const deductFrom = String(item.Deduct_From || "").trim();
 
         if (type === "Emergency Fund" || type === "emergency") {
             filterEmergency += amount;
         } else if (type === "Expense" || type === "expense") {
-            filterExpenses += amount;
+            if (deductFrom === "Emergency Fund") {
+                filterEmergencyExpenses += amount;
+            } else {
+                filterGroupExpenses += amount;
+            }
         } else {
             filterGroup += amount;
         }
     });
 
-    // Handle Date Range Indicator Line
+    // Date Range Indicator Line
     if (dateRangeText) {
         const sDate = startDateInput ? startDateInput.value : "";
         const eDate = endDateInput ? endDateInput.value : "";
@@ -259,7 +311,7 @@ function calculateSummaryAndFilteredResults(allRows, filteredRows) {
         }
     }
 
-    // Handle UI Previous Balance Display
+    // Previous Balance Display Logic
     if (startDateInput && startDateInput.value && previousBalance !== 0) {
         if (rowPrevBalance) rowPrevBalance.style.display = "flex";
         if (currPrevBalance) currPrevBalance.innerHTML = money(previousBalance);
@@ -267,20 +319,21 @@ function calculateSummaryAndFilteredResults(allRows, filteredRows) {
         if (rowPrevBalance) rowPrevBalance.style.display = "none";
     }
 
-    const parentGroup = currGroup ? currGroup.parentElement : null;
-    const parentEmergency = currEmergency ? currEmergency.parentElement : null;
-    const parentExpenses = currExpenses ? currExpenses.parentElement : null;
+    // Dynamic Visibility based on selected filter option
+    const selectedType = typeFilter ? typeFilter.value : "all";
 
-    if (parentGroup) parentGroup.style.display = "flex";
-    if (parentEmergency) parentEmergency.style.display = "flex";
-    if (parentExpenses) parentExpenses.style.display = "flex";
+    if (rowGroup) rowGroup.style.display = (selectedType === "all" || selectedType === "group_fund") ? "flex" : "none";
+    if (rowEmergency) rowEmergency.style.display = (selectedType === "all" || selectedType === "emergency_fund") ? "flex" : "none";
+    if (rowGroupExpense) rowGroupExpense.style.display = (selectedType === "all" || selectedType === "all_expense" || selectedType === "group_expense") ? "flex" : "none";
+    if (rowEmergencyExpense) rowEmergencyExpense.style.display = (selectedType === "all" || selectedType === "all_expense" || selectedType === "emergency_expense") ? "flex" : "none";
 
-    const currentPeriodTotal = (filterGroup + filterEmergency) - filterExpenses;
+    const currentPeriodTotal = (filterGroup + filterEmergency) - (filterGroupExpenses + filterEmergencyExpenses);
     const grandTotal = previousBalance + currentPeriodTotal;
 
     if (currGroup) currGroup.innerHTML = money(filterGroup);
     if (currEmergency) currEmergency.innerHTML = money(filterEmergency);
-    if (currExpenses) currExpenses.innerHTML = money(filterExpenses);
+    if (currGroupExpenses) currGroupExpenses.innerHTML = money(filterGroupExpenses);
+    if (currEmergencyExpenses) currEmergencyExpenses.innerHTML = money(filterEmergencyExpenses);
     
     if (currMonthTotal) {
         currMonthTotal.innerHTML = money(grandTotal);
@@ -300,7 +353,7 @@ function renderFilteredTable() {
     tableBody.innerHTML = "";
     let sr = 1;
 
-    // 1. Add Previous Balance Row if Filtered
+    // Previous Balance Row (اگر سابقہ مہینوں کا کوئی بقایا ہو)
     if (startDateInput && startDateInput.value && previousBalance !== 0) {
         const prevTr = document.createElement("tr");
         prevTr.style.backgroundColor = "#edf2f7";
@@ -315,7 +368,7 @@ function renderFilteredTable() {
         tableBody.appendChild(prevTr);
     }
 
-    // 2. Group items by Date
+    // Group items by Date
     const groups = {};
     filteredData.forEach(item => {
         if (!item.Date) return;
@@ -347,11 +400,12 @@ function renderFilteredTable() {
                 typeUrdu = "ایمرجنسی";
                 badgeColor = "#b7791f";
             } else if (item.Type === "Expense" || item.Type === "expense") {
-                typeUrdu = "اخراجات";
+                const deductFrom = String(item.Deduct_From || "").trim();
+                typeUrdu = deductFrom === "Emergency Fund" ? "ایمرجنسی اخراجات" : "گروپ اخراجات";
                 badgeColor = "#c53030";
             }
 
-            const typeLabel = ` <small style="color:${badgeColor}; font-size:8px; font-weight:normal;">(${typeUrdu})</small>`;
+            const typeLabel = ` <small style="color:${badgeColor}; font-size:10px; font-weight:normal;">(${typeUrdu})</small>`;
 
             const isExpense = (item.Type === "Expense" || item.Type === "expense");
             const expenseRowStyle = isExpense ? 'style="color: #c53030; font-weight: 600;"' : '';
@@ -402,6 +456,7 @@ function formatDate(dateString) {
    Event Listeners
 ========== */
 if (searchInput) searchInput.addEventListener("input", applyFilters); 
+if (typeFilter) typeFilter.addEventListener("change", applyFilters);
 if (startDateInput) startDateInput.addEventListener("change", applyFilters);
 if (endDateInput) endDateInput.addEventListener("change", applyFilters);
 if (printBtn) {
