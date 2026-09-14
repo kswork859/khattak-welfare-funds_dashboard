@@ -2,220 +2,806 @@
 <html lang="ur" dir="rtl">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Khattak Welfare Fund Report</title>
 
-    <!-- Urdu Font -->
+
+    <!-- ==========================================
+         Urdu Fonts
+    =========================================== -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
+
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400..700&display=swap" rel="stylesheet">
-    <link href='https://kswork859.github.io/blogger-urdu-fonts/font.css' rel='stylesheet'/>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400..700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://kswork859.github.io/blogger-urdu-fonts/font.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- Main CSS -->
 
     <link rel="stylesheet" href="style.css">
 
-    <!-- Custom Layout Rules for Filter Result Card Spacing -->
-    <style>
-        .filter-summary-card .summary-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin: 8px 0;
-        }
-        .filter-summary-card .summary-item span {
-            unicode-bidi: embed;
-        }
-        #dateRangeText {
-            font-size: 0.9rem;
-            color: #4a5568;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-        .type-filter-select {
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1px solid #cbd5e0;
-            font-family: 'Noto Nastaliq Urdu', sans-serif;
-            font-size: 0.9rem;
-            outline: none;
-            background-color: #ffffff;
-            color: #2d3748;
-        }
-    </style>
+
+    <!-- ==========================================
+         Custom CSS
+    =========================================== -->
+
+    
+
 </head>
+
 
 <body>
 
-    <!-- Loading -->
+
+    <!-- ==========================================
+         Loading
+    ========================================== -->
+
     <div id="loading">
+
         <div class="loader"></div>
-        <p>رپورٹ لوڈ ہو رہی ہے۔۔۔</p>
+
+        <p>
+            رپورٹ لوڈ ہو رہی ہے۔۔۔
+        </p>
+
     </div>
 
-    <!-- Main Container -->
-    <div class="container" id="reportContainer" style="display:none;">
 
-        <!-- Header -->
+
+    <!-- ==========================================
+         MAIN CONTAINER
+    ========================================== -->
+
+    <div
+        class="container"
+        id="reportContainer"
+        style="display:none;"
+    >
+
+
+
+        <!-- ==========================================
+             HEADER
+        ========================================== -->
+
         <header class="header">
-            <img src="images/banner.png" alt="Khattak Welfare Group Banner" class="header-banner">
+
+            <img
+                src="images/banner.png"
+                alt="Khattak Welfare Group Banner"
+                class="header-banner"
+            >
+
         </header>
 
-        <!-- Dashboard Summary -->
-        <section class="summary">
 
-            <!-- FIRST ROW: Total Fund -->
-            <div class="summary-row-1">
-                <div class="card" style="text-align: center;">
-                    <span class="label">موجودہ بیلنس</span>
-                    <h2 id="closingBalance" style="color:#2d3748; font-size: 2.25rem; margin-top: 10px;">0</h2>
-                </div>
+
+        <!-- ==========================================
+             NEWS CHANNEL TICKER
+        ========================================== -->
+
+        <div class="news-ticker">
+
+
+            <!-- Breaking News -->
+
+            <div class="news-label">
+
+                🔴 اہم اطلاع
+
             </div>
 
-            <!-- SECOND ROW: Core Operational Cards Breakdown -->
-            <div class="summary-row-2">
-                <div class="khan-div">
-                    <!-- Group Fund -->
-                    <div class="card">
-                        <span class="label">موجودہ گروپ فنڈ</span>
-                        <h2 id="totalGroupFund" style="color:#2b6cb0;">0</h2>
+
+
+            <!-- Ticker Window -->
+
+            <div class="ticker-window">
+
+
+                <!-- Moving Track -->
+
+                <div class="ticker-track">
+
+
+                    <!-- FIRST COPY -->
+
+                    <div class="ticker-content">
+
+
+                        <div class="ticker-item">
+
+                            اگر کسی بھائی نے فنڈ جمع کروایا ہو اور وہ ویب سائٹ پر شو نہ ہوا ہو
+                            تو اکاؤنٹ شبیر حسین سے
+
+                            <a href="tel:03455458576">
+                                03455458576
+                            </a>
+
+                            پر رابطہ کریں۔
+
+                        </div>
+
+
+                        <div class="ticker-separator">
+                            ★
+                        </div>
+
+
+                        <div class="ticker-item">
+
+                            فنڈ جمع کروانے کے بعد اپنی رسید یا ادائیگی کا ثبوت ضرور محفوظ رکھیں۔
+
+                        </div>
+
+
+                        <div class="ticker-separator">
+                            ★
+                        </div>
+
+
+                        <div class="ticker-item">
+
+                            Khattak Welfare Group
+
+                        </div>
+
+
+                        <div class="ticker-separator">
+                            ★
+                        </div>
+
+
                     </div>
 
-                    <!-- Emergency Fund -->
-                    <div class="card">
-                        <span class="label">موجودہ ایمرجنسی فنڈ</span>
-                        <h2 id="totalEmergencyFund" style="color:#b7791f;">0</h2>
+
+
+                    <!-- SECOND COPY
+                         Required for seamless scrolling
+                    -->
+
+                    <div class="ticker-content">
+
+
+                        <div class="ticker-item">
+
+                            اگر کسی بھائی نے فنڈ جمع کروایا ہو اور وہ ویب سائٹ پر شو نہ ہوا ہو
+                            تو اکاؤنٹ شبیر حسین سے
+
+                            <a href="tel:03455458576">
+                                03455458576
+                            </a>
+
+                            پر رابطہ کریں۔
+
+                        </div>
+
+
+                        <div class="ticker-separator">
+                            ★
+                        </div>
+
+
+                        <div class="ticker-item">
+
+                            فنڈ جمع کروانے کے بعد اپنی رسید یا ادائیگی کا ثبوت ضرور محفوظ رکھیں۔
+
+                        </div>
+
+
+                        <div class="ticker-separator">
+                            ★
+                        </div>
+
+
+                        <div class="ticker-item">
+
+                            Khattak Welfare Group
+
+                        </div>
+
+
+                        <div class="ticker-separator">
+                            ★
+                        </div>
+
+
                     </div>
+
+
                 </div>
-
-                <!-- Total Expenses -->
-                <div class="khan-div">
-                    <div class="card" id="kul-amdan">
-                        <span class="label">جمع شدہ رقم</span>
-                        <h2 id="totalCollection" style="color:#2f855a;">0</h2>
-                    </div>
-                    <div class="card">
-                        <span class="label">خرچ شدہ رقم</span>
-                        <h2 id="totalExpenses" style="color:#c53030;">0</h2>
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-        <!-- Toolbar -->
-        <section class="toolbar">
-            <input type="text" id="searchInput" placeholder="نام سے تلاش کریں...">
-
-            <!-- Category / Type Filter Dropdown -->
-            <select id="typeFilter" class="type-filter-select">
-                <option value="all">تمام ریکارڈز (All)</option>
-                <option value="group_fund">صرف گروپ فنڈ (Group Fund)</option>
-                <option value="emergency_fund">صرف ایمرجنسی فنڈ (Emergency Fund)</option>
-                <option value="all_expense">تمام اخراجات (Total Expenses)</option>
-                <option value="group_expense">گروپ فنڈ اخراجات (Group Fund Expenses)</option>
-                <option value="emergency_expense">ایمرجنسی فنڈ اخراجات (Emergency Fund Expenses)</option>
-            </select>
-
-            <div class="filter-group">
-                <div class="date-range-group">
-                    <label for="startDate">From:</label>
-                    <input type="date" id="startDate" name="startDate">
-                    <label for="endDate">To:</label>
-                    <input type="date" id="endDate" name="endDate">
-                </div>
-            </div>
-
-            <button id="printBtn">🖨 پرنٹ</button>
-        </section>
-
-        <!-- Report Table -->
-        <section class="table-wrapper">
-            <table id="fundTable">
-                <thead>
-                    <tr>
-                        <th>شمار</th>
-                        <th>تفصیل / عطیہ دہندہ</th>
-                        <th>رقم</th>
-                        <th>تاریخ</th>
-                        <th>یومیہ میزان</th>
-                    </tr>
-                </thead>
-                <tbody id="fundTableBody">
-                    <!-- Dynamic Rows populated by report.js -->
-                </tbody>
-            </table>
-        </section>
-
-        <!-- THIRD ROW: Dynamic Filter Result Matrix -->
-        <div class="summary-row-3">
-
-            <!-- Filter Result Card -->
-            <div class="card monthly-card filter-summary-card">
-
-                <span class="label" id="lblCurrMonth">
-                    موجودہ منتخب فلٹر کا رزلٹ
-                </span>
-
-                <p id="dateRangeText" style="display:none;"></p>
-
-                <!-- Previous Balance -->
-                <h3 id="rowPrevBalance" class="summary-item previous" style="display:none;">
-                    <span>سابقہ رقم</span>
-                    <span id="currPrevBalance">0</span>
-                </h3>
-
-                <h3 id="rowGroup" class="summary-item">
-                    <span>گروپ فنڈ (آمدن)</span>
-                    <span id="currGroup">0</span>
-                </h3>
-
-                <h3 id="rowEmergency" class="summary-item">
-                    <span>ایمرجنسی فنڈ (آمدن)</span>
-                    <span id="currEmergency">0</span>
-                </h3>
-
-                <!-- Separated Expenses Breakdown -->
-                <h3 id="rowGroupExpense" class="summary-item expense">
-                    <span>گروپ فنڈ اخراجات</span>
-                    <span id="currGroupExpenses">0</span>
-                </h3>
-
-                <h3 id="rowEmergencyExpense" class="summary-item expense">
-                    <span>ایمرجنسی فنڈ اخراجات</span>
-                    <span id="currEmergencyExpenses">0</span>
-                </h3>
-
-                <hr>
-
-                <span id="lblGrandTotal" class="grand-total-label">
-                    فلٹر شدہ صافی بیلنس (گرینڈ ٹوٹل)
-                </span>
-
-                <h2 id="currMonthTotal" class="grand-total-value">
-                    0
-                </h2>
 
             </div>
 
         </div>
 
-        <!-- Footer -->
+
+
+        <!-- ==========================================
+             DASHBOARD SUMMARY
+        ========================================== -->
+
+        <section class="summary">
+
+
+            <!-- FIRST ROW -->
+
+            <div class="summary-row-1">
+
+
+                <div
+                    class="card"
+                    style="text-align: center;"
+                >
+
+                    <span class="label">
+
+                        موجودہ بیلنس
+
+                    </span>
+
+
+                    <h2
+                        id="closingBalance"
+                        style="
+                            color:#2d3748;
+                            font-size:2.25rem;
+                            margin-top:10px;
+                        "
+                    >
+
+                        0
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SECOND ROW -->
+
+            <div class="summary-row-2">
+
+
+                <!-- Group + Emergency -->
+
+                <div class="khan-div">
+
+
+                    <!-- Group Fund -->
+
+                    <div class="card">
+
+                        <span class="label">
+
+                            موجودہ گروپ فنڈ
+
+                        </span>
+
+
+                        <h2
+                            id="totalGroupFund"
+                            style="color:#2b6cb0;"
+                        >
+
+                            0
+
+                        </h2>
+
+                    </div>
+
+
+
+                    <!-- Emergency Fund -->
+
+                    <div class="card">
+
+                        <span class="label">
+
+                            موجودہ ایمرجنسی فنڈ
+
+                        </span>
+
+
+                        <h2
+                            id="totalEmergencyFund"
+                            style="color:#b7791f;"
+                        >
+
+                            0
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Collection + Expenses -->
+
+                <div class="khan-div hid">
+
+
+                    <!-- Collection -->
+
+                    <div
+                        class="card"
+                        id="kul-amdan"
+                    >
+
+                        <span class="label">
+
+                            جمع شدہ رقم
+
+                        </span>
+
+
+                        <h2
+                            id="totalCollection"
+                            style="color:#2f855a;"
+                        >
+
+                            0
+
+                        </h2>
+
+                    </div>
+
+
+
+                    <!-- Expenses -->
+
+                    <div class="card" id="kul-amdan-2">
+
+                        <span class="label">
+
+                            خرچ شدہ رقم
+
+                        </span>
+
+
+                        <h2
+                            id="totalExpenses"
+                            style="color:#c53030;"
+                        >
+
+                            0
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             TOOLBAR
+        ========================================== -->
+
+        <section class="toolbar">
+
+
+            <!-- Search -->
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="نام سے تلاش کریں..."
+            >
+
+
+
+            <!-- Type Filter -->
+
+            <select
+                id="typeFilter"
+                class="type-filter-select"
+            >
+
+
+                <option value="all">
+
+                    تمام ریکارڈز (All)
+
+                </option>
+
+
+                <option value="group_fund">
+
+                    صرف گروپ فنڈ (Group Fund)
+
+                </option>
+
+
+                <option value="emergency_fund">
+
+                    صرف ایمرجنسی فنڈ (Emergency Fund)
+
+                </option>
+
+
+                <option value="all_expense">
+
+                    تمام اخراجات (Total Expenses)
+
+                </option>
+
+
+                <option value="group_expense">
+
+                    گروپ فنڈ اخراجات (Group Fund Expenses)
+
+                </option>
+
+
+                <option value="emergency_expense">
+
+                    ایمرجنسی فنڈ اخراجات (Emergency Fund Expenses)
+
+                </option>
+
+
+            </select>
+
+
+
+            <!-- Date Filter -->
+
+            <div class="filter-group">
+
+
+                <div class="date-range-group">
+
+
+                    <label for="startDate">
+                        From:
+                    </label>
+
+
+                    <input
+                        type="date"
+                        id="startDate"
+                        name="startDate"
+                    >
+
+
+                    <label for="endDate">
+                        To:
+                    </label>
+
+
+                    <input
+                        type="date"
+                        id="endDate"
+                        name="endDate"
+                    >
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Print -->
+
+            <button id="printBtn">
+
+                🖨 پرنٹ
+
+            </button>
+
+
+        </section>
+
+
+
+        <!-- ==========================================
+             REPORT TABLE
+        ========================================== -->
+
+        <section class="table-wrapper">
+
+
+            <table id="fundTable">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            شمار
+                        </th>
+
+                        <th>
+                            تفصیل / عطیہ دہندہ
+                        </th>
+
+                        <th>
+                            رقم
+                        </th>
+
+                        <th>
+                            تاریخ
+                        </th>
+
+                        <th>
+                            یومیہ میزان
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody id="fundTableBody">
+
+                    <!-- Dynamic rows -->
+
+                </tbody>
+
+
+            </table>
+
+
+        </section>
+
+
+
+        <!-- ==========================================
+             FILTER RESULT
+        ========================================== -->
+
+        <div class="summary-row-3">
+
+
+            <div
+                class="card monthly-card filter-summary-card"
+            >
+
+
+                <span
+                    class="label"
+                    id="lblCurrMonth"
+                >
+
+                    موجودہ منتخب فلٹر کا رزلٹ
+
+                </span>
+
+
+
+                <p
+                    id="dateRangeText"
+                    style="display:none;"
+                >
+
+                </p>
+
+
+
+                <!-- Previous Balance -->
+
+                <h3
+                    id="rowPrevBalance"
+                    class="summary-item previous"
+                    style="display:none;"
+                >
+
+                    <span>
+                        سابقہ رقم
+                    </span>
+
+
+                    <span id="currPrevBalance">
+                        0
+                    </span>
+
+                </h3>
+
+
+
+                <!-- Group Income -->
+
+                <h3
+                    id="rowGroup"
+                    class="summary-item"
+                >
+
+                    <span>
+                        گروپ فنڈ (آمدن)
+                    </span>
+
+
+                    <span id="currGroup">
+                        0
+                    </span>
+
+                </h3>
+
+
+
+                <!-- Emergency Income -->
+
+                <h3
+                    id="rowEmergency"
+                    class="summary-item"
+                >
+
+                    <span>
+                        ایمرجنسی فنڈ (آمدن)
+                    </span>
+
+
+                    <span id="currEmergency">
+                        0
+                    </span>
+
+                </h3>
+
+
+
+                <!-- Group Expenses -->
+
+                <h3
+                    id="rowGroupExpense"
+                    class="summary-item expense"
+                >
+
+                    <span>
+                        گروپ فنڈ اخراجات
+                    </span>
+
+
+                    <span id="currGroupExpenses">
+                        0
+                    </span>
+
+                </h3>
+
+
+
+                <!-- Emergency Expenses -->
+
+                <h3
+                    id="rowEmergencyExpense"
+                    class="summary-item expense"
+                >
+
+                    <span>
+                        ایمرجنسی فنڈ اخراجات
+                    </span>
+
+
+                    <span id="currEmergencyExpenses">
+                        0
+                    </span>
+
+                </h3>
+
+
+
+                <hr>
+
+
+
+                <!-- Grand Total -->
+
+                <span
+                    id="lblGrandTotal"
+                    class="grand-total-label"
+                >
+
+                    فلٹر شدہ صافی بیلنس (گرینڈ ٹوٹل)
+
+                </span>
+
+
+                <h2
+                    id="currMonthTotal"
+                    class="grand-total-value"
+                >
+
+                    0
+
+                </h2>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ==========================================
+             IMPORTANT NOTE
+        ========================================== -->
+
+        <div class="important-note">
+
+
+            <strong>
+                اہم نوٹ:
+            </strong>
+
+
+            اگر کسی بھائی نے فنڈ جمع کروایا ہو اور وہ ویب سائٹ پر شو نہ ہوا ہو
+            تو اکاؤنٹ شبیر حسین سے
+
+
+            <a href="tel:03455458576">
+
+                03455458576
+
+            </a>
+
+
+            پر رابطہ کریں۔
+
+
+        </div>
+
+
+
+        <!-- ==========================================
+             FOOTER
+        ========================================== -->
+
         <footer>
+
+
             <p>
+
                 Developed with ❤️ by Khurram Shahzad
+
                 <br>
+
                 Khattak Welfare Group
+
                 <br>
+
                 Nakka Afghanan, Tehsil Jand, District Attock
+
             </p>
+
+
         </footer>
+
 
     </div>
 
-    <!-- JavaScript -->
+
+
+    <!-- ==========================================
+         JavaScript
+    ========================================== -->
+
     <script src="report.js"></script>
+
 
 </body>
 
