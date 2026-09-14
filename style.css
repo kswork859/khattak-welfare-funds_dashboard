@@ -3,8 +3,10 @@
    style.css
 ==================================*/
 
-#kul-amdan {
-    
+#kul-amdan,
+#kul-amdan-2 {
+
+    display: none;
 }
 
 * {
@@ -121,12 +123,13 @@ Summary Layout & Grid System
     gap: 20px;
     margin-top: 10px;
 }
-.khan-div{
-   width: 100%;
-       display: flex;
-    flex-direction: column;
+
+.khan-div {
+    width: 100%;
+    display: flex;
     gap: 4px;
 }
+
 .card {
     width: 100%;
     background: white;
@@ -179,7 +182,7 @@ Summary Layout & Grid System
 }
 
 /* Spacing & Readability Fix for Filtered Result Items */
-.card h3, 
+.card h3,
 .summary-item {
     font-family: 'Bombay Black', 'Jameel Noori', serif;
     font-size: 1.15rem;
@@ -418,14 +421,14 @@ tbody td:nth-child(2) {
 }
 
 .amount {
-   direction: ltr;
+    direction: ltr;
     font-weight: bold;
     color: #0B6E4F;
     letter-spacing: 0.5px;
 }
 
 .daily-total {
-   direction: ltr;
+    direction: ltr;
     background: #fffcf0;
     font-weight: bold;
     letter-spacing: 0.5px;
@@ -445,6 +448,7 @@ footer {
     margin: 40px 0 20px 0;
     color: #718096;
     font-size: 16px;
+    border: 2px solid black;
 }
 
 /*==========================
@@ -558,9 +562,9 @@ Mobile Layout
     }
 
     .date-range-group {
-       flex-direction: column;
+        flex-direction: column;
         width: 100%;
-       justify-content: space-around;
+        justify-content: space-around;
         align-item: flex-start;
     }
 
@@ -721,7 +725,7 @@ Print Layout Rules
     }
 
     .toolbar,
-    footer,
+    .news-ticker,
     #printBtn {
         display: none !important;
     }
@@ -756,4 +760,475 @@ Print Layout Rules
         background: #0B6E4F !important;
         color: white !important;
     }
+}
+
+.hid{
+    display: none;
+}
+
+/* ==========================================
+           Filter Summary
+        ========================================== */
+
+.filter-summary-card .summary-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    width: 100%;
+
+    margin: 8px 0;
+
+}
+
+
+.filter-summary-card .summary-item span {
+
+    unicode-bidi: embed;
+
+}
+
+
+#dateRangeText {
+
+    font-size: 0.9rem;
+
+    color: #4a5568;
+
+    margin-bottom: 12px;
+
+    font-weight: 600;
+
+}
+
+
+.type-filter-select {
+
+    padding: 8px 12px;
+
+    border-radius: 6px;
+
+    border: 1px solid #cbd5e0;
+
+    font-family: 'Noto Nastaliq Urdu', sans-serif;
+
+    font-size: 0.9rem;
+
+    outline: none;
+
+    background-color: #ffffff;
+
+    color: #2d3748;
+
+}
+
+
+
+/* ==========================================
+           NEWS CHANNEL TICKER
+        ========================================== */
+
+.news-ticker {
+
+    width: 100%;
+
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    overflow: hidden;
+
+    background: #c53030;
+
+    color: #ffffff;
+
+    border-radius: 6px;
+
+    margin: 12px 0 18px;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
+
+    direction: ltr;
+
+}
+
+
+
+/* ==========================================
+           BREAKING NEWS LABEL
+        ========================================== */
+
+.news-label {
+
+    position: relative;
+
+    z-index: 5;
+
+    flex-shrink: 0;
+
+    height: 100%;
+
+    min-width: 125px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0 18px;
+
+    background: #8b1e1e;
+
+    color: #ffffff;
+
+    font-family: 'Noto Nastaliq Urdu', sans-serif;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    direction: rtl;
+
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.12);
+
+}
+
+
+/* Arrow */
+
+.news-label::after {
+
+    content: "";
+
+    position: absolute;
+
+    right: -14px;
+
+    top: 0;
+
+    width: 0;
+
+    height: 0;
+
+    border-top: 26px solid transparent;
+
+    border-bottom: 26px solid transparent;
+
+    border-left: 14px solid #8b1e1e;
+
+}
+
+
+
+/* ==========================================
+           TICKER VIEW
+        ========================================== */
+
+.ticker-window {
+
+    flex: 1;
+
+    height: 100%;
+
+    overflow: hidden;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    direction: ltr;
+
+}
+
+
+
+/* ==========================================
+           MOVING TRACK
+        ========================================== */
+
+.ticker-track {
+
+    display: flex;
+
+    align-items: center;
+
+    width: max-content;
+
+    height: 100%;
+
+    will-change: transform;
+
+    animation: newsTickerMove 35s linear infinite;
+
+}
+
+
+
+/* ==========================================
+           TICKER CONTENT
+        ========================================== */
+
+.ticker-content {
+
+    display: flex;
+
+    align-items: center;
+
+    height: 100%;
+
+    flex-shrink: 0;
+
+}
+
+
+
+.ticker-item {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-shrink: 0;
+
+    padding: 0 45px;
+
+    color: #ffffff;
+
+    font-family: 'Jameel Noori', sans-serif;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    direction: rtl;
+
+}
+
+
+/* Separator */
+
+.ticker-separator {
+
+    color: #ffd54f;
+
+    font-size: 20px;
+
+    margin: 0 10px;
+
+}
+
+
+/* Phone */
+
+.ticker-item a {
+
+    color: #ffe082;
+
+    font-weight: bold;
+
+    text-decoration: none;
+
+    direction: ltr;
+
+    unicode-bidi: embed;
+
+    margin: 0 5px;
+
+}
+
+
+.ticker-item a:hover {
+
+    color: #ffffff;
+
+    text-decoration: underline;
+
+}
+
+
+
+/* ==========================================
+           NEWS ANIMATION
+        ========================================== */
+
+@keyframes newsTickerMove {
+
+    0% {
+
+        transform: translateX(0);
+
+    }
+
+    100% {
+
+        transform: translateX(-50%);
+
+    }
+
+}
+
+
+
+/* ==========================================
+           PAUSE WHEN MOUSE OVER
+        ========================================== */
+
+.news-ticker:hover .ticker-track {
+
+    animation-play-state: paused;
+
+}
+
+
+
+/* ==========================================
+           IMPORTANT NOTE
+        ========================================== */
+
+.important-note {
+
+    margin: 25px auto;
+
+    padding: 15px 20px;
+
+    max-width: 800px;
+
+    background-color: #fff8e1;
+
+    border-right: 5px solid #d69e2e;
+
+    border-radius: 8px;
+
+    color: #744210;
+
+    font-family: 'Noto Nastaliq Urdu', sans-serif;
+
+    font-size: 1rem;
+
+    line-height: 2;
+
+    text-align: right;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+}
+
+
+.important-note strong {
+
+    color: #b7791f;
+
+}
+
+
+.important-note a {
+
+    color: #2b6cb0;
+
+    font-weight: bold;
+
+    text-decoration: none;
+
+    direction: ltr;
+
+    unicode-bidi: embed;
+
+}
+
+
+.important-note a:hover {
+
+    text-decoration: underline;
+
+}
+
+
+
+/* ==========================================
+           MOBILE
+        ========================================== */
+
+@media (max-width: 600px) {
+
+
+    .news-ticker {
+
+        height: 46px;
+
+        margin: 10px 0 15px;
+
+        border-radius: 4px;
+
+    }
+
+
+    .news-label {
+
+        min-width: 90px;
+
+        padding: 0 10px;
+
+        font-size: 12px;
+
+    }
+
+
+    .news-label::after {
+
+        right: -11px;
+
+        border-top-width: 23px;
+
+        border-bottom-width: 23px;
+
+        border-left-width: 11px;
+
+    }
+
+
+    .ticker-item {
+
+        padding: 0 30px;
+
+        font-size: 13px;
+
+    }
+
+
+    .ticker-separator {
+
+        font-size: 16px;
+
+    }
+
+
+    .ticker-track {
+
+        animation-duration: 25s;
+
+    }
+
+
+    .important-note {
+
+        margin: 20px 10px;
+
+        padding: 12px 15px;
+
+        font-size: 0.9rem;
+
+    }
+
 }
